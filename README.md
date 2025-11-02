@@ -1,4 +1,3 @@
-![u-sell-it](assets/u-sell-it icon.png)
 <p aling="center">
   <img src="assets/u-sell-it icon.png" width="100" alt="u-sell-it">
 </p>
