@@ -229,4 +229,5 @@ if __name__ == "__main__":
     app = QApplication(sys.argv)    # Create the applicatoin object
     window = LoginScreen()          # Instantiate the login screen
     window.show()                   # Display the window
+
     sys.exit(app.exec())            # Start the even loop and exit cleanly
