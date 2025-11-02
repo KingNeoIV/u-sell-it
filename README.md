@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/u-sell-it_icon.png" width="200" alt="u-sell-it">
+  <img src="assets/u-sell-it_icon_black.png" width="200" alt="u-sell-it">
 </p>
 
 # 🛍️ u-sell-it (Standalone Desktop App)
