@@ -15,7 +15,7 @@ This project is currently in its early stages:
 - ✅ **Login screen** completed (PyQt6)
 - 🔄 **Registration form** in progress
 - 🧩 Backend integration via C++ DLL planned
-- 📦 Future modules will include item listings, user profiles, and transaction tracking
+- 🗄️ Database connectivity planned (local or remote SQL-based schema)
 
 > Note: This is a desktop application, not a web-based `.com` platform.
 
@@ -34,6 +34,11 @@ This project is currently in its early stages:
   - Cross-language communication via `ctypes` or `cffi`
   - Modular backend design for future expansion
 
+- **Database Connectivity**
+  - SQL-based schema for user accounts, item listings, and transactions
+  - Designed to support both local and remote database configurations
+  - Future integration with bidding logic and transaction history
+
 - **Standalone Execution**
   - No internet required for core functionality
   - Lightweight and fast startup
@@ -45,11 +50,13 @@ This project is currently in its early stages:
 
 - **Frontend**: PyQt6
 - **Backend**: C++ (compiled into `.dll`)
+- **Database**: SQL-based schema (local or remote)
 - **Design Philosophy**:
   - Modular components
   - Fully commented codebase
   - Separation of concerns
   - UI/UX refinement through iterative testing
+  - Structured data management via normalized tables and secure queries
 
 ---
 
@@ -57,6 +64,7 @@ This project is currently in its early stages:
 
 - Login screen icons and layout files
 - Screenshot of the `.py` UI implementation
+- App icon (`u-sell-it-icon.png`)
 
 ---
 
@@ -66,6 +74,8 @@ This project is currently in its early stages:
 
 > Installer will be available once the registration form and backend wiring are complete.
 
+> This app runs locally but connects to a structured database for storing user accounts, item listings, and transaction data. The database can be hosted locally or remotely depending on deployment needs.
+
 ---
 
 ## 🧭 Roadmap
@@ -73,9 +83,10 @@ This project is currently in its early stages:
 1. ✅ Login screen
 2. 🔄 Registration form
 3. 🧩 Backend DLL integration
-4. 📦 Local item listing and browsing module
-5. 🧾 Transaction logging and user profiles
-6. 🌎 Optional internet-connected features (future)
+4. 🗄️ Database connection and schema implementation
+5. 📦 Local item listing and browsing module
+6. 🧾 Transaction logging and user profiles
+7. 🌎 Optional internet-connected features (future)
 
 > ⚠️ Note: The antivirus module is part of a separate application and is not included in u-sell-it.
 
