@@ -1,3 +1,8 @@
+![u-sell-it](assets/u-sell-it_icon.png)
+<p aling="center">
+  <img src="assets/u-sell-it_icon.png" width="100" alt="u-sell-it">
+</p>
+
 # 🛍️ u-sell-it (Standalone Desktop App)
 
 **u-sell-it** is a standalone desktop application in active development, designed to help users buy, sell, and trade items locally. Built with a modular architecture and refined user interface, this app is the foundation for a scalable offline-first platform focused on community commerce.
