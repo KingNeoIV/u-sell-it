@@ -91,5 +91,4 @@ If you're running from source:
 ```bash
 git clone https://github.com/KingNeoIV/u-sell-it.git
 cd u-sell-it
-pip install -r requirements.txt
 python main.py
