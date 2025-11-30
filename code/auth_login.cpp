@@ -12,7 +12,7 @@ extern "C" __declspec(dllexport) int validate_login(const char* username, const 
         pqxx::connection conn
         (
             "host= " // Enter the database ip address HERE
-            "dbname= " // Enter the name is the database HERE
+            "dbname= " // Enter the name of the database HERE
             "user= " // Enter the admin/user
             "password=" // Enter password for admin/user
         );
@@ -111,7 +111,7 @@ extern "C" __declspec(dllexport) int register_user
             pqxx::connection conn
             (
                 "host= " // Enter the database ip address HERE
-                "dbname= " // Enter the name is the database HERE
+                "dbname= " // Enter the name of the database HERE
                 "user= " // Enter the admin/user
                 "password=" // Enter password for admin/user
             );
