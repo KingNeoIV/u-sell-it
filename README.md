@@ -84,11 +84,17 @@ This project is still in its early stages:
 
 ---
 
+## 🐍 Prerequisites
+
+- Python 3.10 or newer (download from [python.org](https://www.python.org/downloads/))
+- pip (comes bundled with Python)
+
 ## 📥 Installation (Dev Mode)
 
-If you're running from source:
+Clone the repo and install dependencies:
 
 ```bash
 git clone https://github.com/KingNeoIV/u-sell-it.git
 cd u-sell-it
+pip install -r requirements.txt
 python main.py
