@@ -1,0 +1,2 @@
+# GUI framework
+PyQt6>=6.5
