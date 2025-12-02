@@ -45,7 +45,7 @@ This project is still in its early stages:
   - Dynamic resizing and label positioning
   - Custom icons and assets for branded presentation
 
-- **Backend Integration (C++ DLL)**
+- **Backend Integration (C++ DLL, .so)**
   - Secure function calls via statically linked `.dll, .so`
   - Cross-language communication via `ctypes` or `cffi`
   - Modular backend design for future expansion
