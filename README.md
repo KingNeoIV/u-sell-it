@@ -141,4 +141,3 @@ python main.py
 ---
 
 > ⚠️ Note: On macOS, the demo is not yet implemented. Running `main.py` will print **"macOS demo coming soon!"** until a dedicated version is added.
-```
