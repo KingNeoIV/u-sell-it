@@ -10,7 +10,7 @@
 
 ## 🎯 Purpose
 
-This project is designed for individuals who want to learn how to build their own desktop application while also setting up and managing a PostgreSQL database on Ubuntu. It’s a hands‑on learning experience that combines frontend development (PyQt6), backend logic (C++ DLL), and database management (PostgreSQL).
+This project is designed for individuals who want to learn how to build their own desktop application while also setting up and managing a PostgreSQL database on Ubuntu. It’s a hands‑on learning experience that combines frontend development (PyQt6), backend logic (C++ DLL & .so), and database management (PostgreSQL).
 
 The goal is not only to serve as a personal learning journey, but also to provide a foundation for others who want to explore building standalone apps with modular architecture.
 
@@ -30,7 +30,7 @@ This project is still in its early stages:
 
 - ✅ **Login screen** completed (PyQt6)
 - 🔄 **Registration form** in progress
-- 🧩 **Backend logic** written in C++ (DLL integration planned)
+- 🧩 **Backend logic** written in C++ (DLL & .so integration planned)
 - 🗄️ **Database setup**: PostgreSQL installed on Ubuntu, schema design in progress
 
 > Note: This is a desktop application, not a web-based `.com` platform.
@@ -46,7 +46,7 @@ This project is still in its early stages:
   - Custom icons and assets for branded presentation
 
 - **Backend Integration (C++ DLL)**
-  - Secure function calls via statically linked `.dll`
+  - Secure function calls via statically linked `.dll, .so`
   - Cross-language communication via `ctypes` or `cffi`
   - Modular backend design for future expansion
 
@@ -65,7 +65,7 @@ This project is still in its early stages:
 ## 🧱 Architecture
 
 - **Frontend**: PyQt6  
-- **Backend**: C++ (compiled into `.dll`)  
+- **Backend**: C++ (compiled into `.dll, .so`)  
 - **Database**: PostgreSQL (Ubuntu setup complete, schema design in progress)  
 - **Design Philosophy**:
   - Modular components
@@ -89,12 +89,56 @@ This project is still in its early stages:
 - Python 3.10 or newer (download from [python.org](https://www.python.org/downloads/))
 - pip (comes bundled with Python)
 
+---
+
 ## 📥 Installation (Dev Mode)
 
-Clone the repo and install dependencies:
+### 🔹 Clone the repository
+You can clone using either HTTPS or SSH:
 
+**HTTPS:**
 ```bash
 git clone https://github.com/KingNeoIV/u-sell-it.git
 cd u-sell-it
+```
+
+**SSH (recommended):**
+```bash
+git clone git@github.com:KingNeoIV/u-sell-it.git
+cd u-sell-it
+```
+
+---
+
+### 🔹 Linux setup
+Create and activate a virtual environment:
+```bash
+python3 -m venv venv
+source venv/bin/activate
+```
+
+Install dependencies:
+```bash
+pip install -r requirements.txt
+```
+
+Run the demo:
+```bash
+python main.py
+```
+
+---
+
+### 🔹 Windows setup
+On Windows, you don’t need to create a virtual environment.  
+Simply install dependencies and run the demo:
+
+```powershell
 pip install -r requirements.txt
 python main.py
+```
+
+---
+
+> ⚠️ Note: On macOS, the demo is not yet implemented. Running `main.py` will print **"macOS demo coming soon!"** until a dedicated version is added.
+```
