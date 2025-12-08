@@ -1,5 +1,6 @@
 [![Watch the demo video](https://img.youtube.com/vi/dB16jkwRyhc/0.jpg)](https://www.youtube.com/watch?v=dB16jkwRyhc)
 
+[![Watch on YouTube](https://img.shields.io/badge/YouTube-Video-red?logo=youtube&logoColor=white)](https://www.youtube.com/watch?v=dB16jkwRyhc)
 
 <p align="center">
   <img src="assets/u-sell-it_icon_black.png" width="200" alt="u-sell-it">
