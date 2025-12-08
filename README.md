@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://www.youtube.com/watch?v=dB16jkwRyhc">
-    <img src="https://img.youtube.com/vi/dB16jkwRyhc/0.jpg" width="600" alt="▶ Play Demo Video" />
+    <img src="https://img.youtube.com/vi/dB16jkwRyhc/0.jpg" width="500" alt="▶ Play Demo Video" />
   </a>
   <br>
   <a href="https://www.youtube.com/watch?v=dB16jkwRyhc">
