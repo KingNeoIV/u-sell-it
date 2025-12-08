@@ -1,4 +1,6 @@
-[![Watch the demo video](https://img.youtube.com/vi/dB16jkwRyhc/0.jpg)](https://www.youtube.com/watch?v=dB16jkwRyhc)
+<a href="https://www.youtube.com/watch?v=dB16jkwRyhc">
+  <img src="https://img.youtube.com/vi/dB16jkwRyhc/0.jpg" width="800" />
+</a>
 
 [![Watch on YouTube](https://img.shields.io/badge/YouTube-Video-red?logo=youtube&logoColor=white)](https://www.youtube.com/watch?v=dB16jkwRyhc)
 
