@@ -1,8 +1,6 @@
-<a href="https://www.youtube.com/watch?v=dB16jkwRyhc">
-  <img src="https://img.youtube.com/vi/dB16jkwRyhc/0.jpg" width="800" />
-</a>
+[![Watch the demo video](https://img.youtube.com/vi/dB16jkwRyhc/0.jpg)](https://www.youtube.com/watch?v=dB16jkwRyhc)
 
-[![Watch on YouTube](https://img.shields.io/badge/YouTube-Video-red?logo=youtube&logoColor=white)](https://www.youtube.com/watch?v=dB16jkwRyhc)
+[![Play on YouTube](https://img.shields.io/badge/▶%20Play%20Demo-red?logo=youtube&logoColor=white)](https://www.youtube.com/watch?v=dB16jkwRyhc)
 
 <p align="center">
   <img src="assets/u-sell-it_icon_black.png" width="200" alt="u-sell-it">
