@@ -10,6 +10,7 @@ from PyQt6.QtWidgets import (   # Import selected PyQt6 widget classes for build
 )
 
 from linuxDemo_registerUI import RegisterScreen        # Imports your custom registration screen class
+from linuxDemo_forgotPassUI import ForgotPasswordUI
 from PyQt6.QtGui import (QPixmap, QIcon)     # QPixmap handles images, QIcon handle the window icon
 from PyQt6.QtCore import Qt                  # Provides constants (alignment, key codes, cursor shapes)
 from ctypes import cdll, c_char_p, c_int     # Lets Python call into C++ DLL functions
@@ -44,6 +45,10 @@ class LoginScreen(QWidget):                                                     
     def open_register_screen(self):                                                     # Define the open_register_screen method to launch the registration window when the user chooses to sign up
         self.register_window = RegisterScreen()                                         # Create a new instance of the RegistrationScreen window and assing it to self.register_window
         self.register_window.show()                                                     # Display the registration window on the screen so the user can begin creating an account
+
+    def open_forgot_password_screen(self):
+        self.forgot_window = ForgotPasswordUI()
+        self.forgot_window.show()
 
     def __init__(self):                                                         # Constructor method that initializes the LoginScreen object and sets up its starting state
         super().__init__()                                                      # Call the parent class constructor to ensure proper initialization of inherited functionality
@@ -146,8 +151,8 @@ class LoginScreen(QWidget):                                                     
         button_row.addWidget(self.login_btn)                                                        # Add the Login button to the horizontal button row for side-by-side alignment with other actions
         self.login_btn.clicked.connect(self.handle_login)                                           # Connect the Login button click to the login handler to verify credentials when pressed
 
-        dll_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "linuxDemo_auth_login.so"))  # Resolve the absolute path to the auth_login.so for dynamic loading in the login workflow
-        self.login_lib = cdll.LoadLibrary(dll_path)                                                     # Load the compiled C++ .so to access native authentication functions for secure login processing
+        dll_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "linuxDemo_auth_login.so")) # Resolve the absolute path to the auth_login.so for dynamic loading in the login workflow
+        self.login_lib = cdll.LoadLibrary(dll_path)                                                 # Load the compiled C++ DLL to access native authentication functions for secure login processing
 
         self.login_lib.validate_login.argtypes = [c_char_p, c_char_p]           # Define argument types for validate_login to accept username and password as C-style strings
         self.login_lib.validate_login.restype = c_int                           # Specify return type of validate_login as integere to interpret success/failure codesd from the DLL
@@ -195,7 +200,7 @@ class LoginScreen(QWidget):                                                     
         """)                                                                # Style the Forgot button to match the Login button with consistant color, hover, and press effects
         self.forgot_btn.setCursor(Qt.CursorShape.PointingHandCursor)        # Set cursor to pointing hand on Forgot Password button to signal it's clickable and interactive
         button_row.addWidget(self.forgot_btn)                               # Add the Forgot Password button to the horizontal layout to complete the action row with recovery support
-        self.forgot_btn.clicked.connect(self.handle_login)                  # (Temporary) Connect Forgot Password button to login handler-placeholder until recovery flow is implemented
+        self.forgot_btn.clicked.connect(self.open_forgot_password_screen)
 
         login_layout.addLayout(button_row)                                  # Insert the button row into the main login layout to organize all action buttons within the form structure
 
