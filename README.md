@@ -2,10 +2,6 @@
   <a href="https://www.youtube.com/watch?v=dB16jkwRyhc">
     <img src="https://img.youtube.com/vi/dB16jkwRyhc/0.jpg" width="500" alt="▶ Play Demo Video" />
   </a>
-  <br>
-  <a href="https://www.youtube.com/watch?v=dB16jkwRyhc">
-    <img src="https://img.shields.io/badge/▶ Play%20Demo-red?logo=youtube&logoColor=white" />
-  </a>
 </p>
 
 <p align="center">
