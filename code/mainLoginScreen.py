@@ -144,17 +144,17 @@ class LoginScreen(QWidget):
         self.login_btn.setStyleSheet(
             """
             QPushButton {
-                background-color: 
+                background-color: #0078D7;
                 color: white;
                 padding: 6px;
                 border-radius: 5px;
                 font-size: 18px;
             }
             QPushButton:hover {
-                background-color: 
+                background-color: #2893f5;
             }
             QPushButton:pressed {
-                background-color: 
+                background-color: #005a9e;
                 padding-top: 7px;
                 padding-bottom: 5px;
             }
@@ -176,17 +176,17 @@ class LoginScreen(QWidget):
         self.register_btn.setStyleSheet(
             """
             QPushButton {
-                background-color: 
+                background-color: #0078D7;
                 color: white;
                 padding: 6px;
                 border-radius: 5px;
                 font-size: 18px;
             }
             QPushButton:hover {
-                background-color: 
+                background-color: #2893f5;
             }
             QPushButton:pressed {
-                background-color: 
+                background-color: #005a9e;
                 padding-top: 7px;
                 padding-bottom: 5px;
             }
@@ -200,7 +200,7 @@ class LoginScreen(QWidget):
         self.forgot_btn.setStyleSheet(
             """
             QPushButton {
-                background-color: 
+                background-color: #0078D7;
                 color: white;
                 min-width: 130px;
                 padding: 6px;
@@ -208,10 +208,10 @@ class LoginScreen(QWidget):
                 font-size:  18px;
             }
             QPushButton:hover {
-                background-color: 
+                background-color: #2893f5;
             }
             QPushButton:pressed {
-                background-color: 
+                background-color: #005a9e;
                 padding-top: 7px;
                 padding-bottom: 5px;
             }
