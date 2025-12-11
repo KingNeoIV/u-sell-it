@@ -1,6 +1,14 @@
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QLabel, QLineEdit, QHBoxLayout, QPushButton
+from PyQt6.QtWidgets import (
+    QWidget,
+    QVBoxLayout,
+    QLabel,
+    QLineEdit,
+    QHBoxLayout,
+    QPushButton,
+)
 from PyQt6.QtGui import QPixmap, QIcon
 from PyQt6.QtCore import Qt
+
 
 class ForgotPasswordUI(QWidget):
     def __init__(self):
@@ -14,7 +22,12 @@ class ForgotPasswordUI(QWidget):
         # Image
         forgot_password_image = QLabel(self)
         pixmap = QPixmap("assets/reset-password.png")
-        pixmap = pixmap.scaled(175, 175, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation)
+        pixmap = pixmap.scaled(
+            175,
+            175,
+            Qt.AspectRatioMode.KeepAspectRatio,
+            Qt.TransformationMode.SmoothTransformation,
+        )
         forgot_password_image.setPixmap(pixmap)
         forgot_password_image.setAlignment(Qt.AlignmentFlag.AlignHCenter)
 
@@ -26,7 +39,7 @@ class ForgotPasswordUI(QWidget):
         # Instructions
         instructions_label = QLabel(
             "Please enter your account's\nemail address and we will send you a verification code.",
-            self
+            self,
         )
         instructions_label.setStyleSheet("font-size: 16px; color: gray;")
         instructions_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
@@ -57,7 +70,9 @@ class ForgotPasswordUI(QWidget):
         # Sub-layout
         top_layout = QVBoxLayout()
         top_layout.setSpacing(25)
-        top_layout.addWidget(forgot_password_image, alignment=Qt.AlignmentFlag.AlignHCenter)
+        top_layout.addWidget(
+            forgot_password_image, alignment=Qt.AlignmentFlag.AlignHCenter
+        )
         top_layout.addWidget(forgot_pass_widget)
         top_layout.addWidget(instructions_label)
         top_layout.addLayout(tbox_location)
@@ -66,10 +81,12 @@ class ForgotPasswordUI(QWidget):
         layout.addLayout(top_layout)
         layout.addStretch()
 
+
 # Keep standalone mode for testing
 if __name__ == "__main__":
     import sys
     from PyQt6.QtWidgets import QApplication
+
     app = QApplication(sys.argv)
     window = ForgotPasswordUI()
     window.show()

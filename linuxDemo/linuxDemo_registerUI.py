@@ -1,40 +1,41 @@
 # ============= PyQt6 Imports =========================
-from PyQt6.QtWidgets import(
-    QApplication, 
-    QWidget, 
-    QLabel, 
-    QLineEdit, 
+from PyQt6.QtWidgets import (
+    QApplication,
+    QWidget,
+    QLabel,
+    QLineEdit,
     QPushButton,
-    QVBoxLayout, 
-    QHBoxLayout, 
-    QFormLayout, 
-    QMessageBox
+    QVBoxLayout,
+    QHBoxLayout,
+    QFormLayout,
+    QMessageBox,
 )
 from PyQt6.QtGui import QIcon
 from PyQt6.QtCore import Qt
 
-# 
+#
 from ctypes import cdll, c_char_p, c_int
 import os, sys
 
+
 class RegisterScreen(QWidget):
     def handle_register(self):
-        #check password confirmation
+        # check password confirmation
         if self.password.text() != self.confirm.text():
             QMessageBox.warning(self, "Error", "Passwords do not match.")
             return
-        
+
         result = self.register_lib.register_user(
-            self.first_name.text().encode('utf-8'),
-            self.last_name.text().encode('utf-8'),
-            self.street_address.text().encode('utf-8'),
-            self.city.text().encode('utf-8'),
-            self.state.text().encode('utf-8'),
-            self.zip_code.text().encode('utf-8'),
-            self.phone.text().encode('utf-8'),
-            self.email.text().encode('utf-8'),
-            self.username.text().encode('utf-8'),
-            self.password.text().encode('utf-8'),
+            self.first_name.text().encode("utf-8"),
+            self.last_name.text().encode("utf-8"),
+            self.street_address.text().encode("utf-8"),
+            self.city.text().encode("utf-8"),
+            self.state.text().encode("utf-8"),
+            self.zip_code.text().encode("utf-8"),
+            self.phone.text().encode("utf-8"),
+            self.email.text().encode("utf-8"),
+            self.username.text().encode("utf-8"),
+            self.password.text().encode("utf-8"),
         )
 
         if result == 1:
@@ -42,23 +43,34 @@ class RegisterScreen(QWidget):
             self.close()
         else:
             QMessageBox.warning(self, "Error", "Registration failed. Try again.")
-            
+
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Register -- u-sell-it")
         self.setFixedSize(1000, 700)
         self.setWindowIcon(QIcon("assets/u-sell-it_icon_black.ico"))
-        
+
         # Load C++ DLL
-        dll_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "linuxDemo_auth_login.so"))
+        dll_path = os.path.abspath(
+            os.path.join(os.path.dirname(__file__), "linuxDemo_auth_login.so")
+        )
 
         if not os.path.exists(dll_path):
             raise FileNotFoundError(f"DLL not found at: {dll_path}")
-        
 
         self.register_lib = cdll.LoadLibrary(dll_path)
-        self.register_lib.register_user.argtypes = [c_char_p, c_char_p, c_char_p, c_char_p, c_char_p, 
-                                                    c_char_p, c_char_p, c_char_p, c_char_p, c_char_p]
+        self.register_lib.register_user.argtypes = [
+            c_char_p,
+            c_char_p,
+            c_char_p,
+            c_char_p,
+            c_char_p,
+            c_char_p,
+            c_char_p,
+            c_char_p,
+            c_char_p,
+            c_char_p,
+        ]
         self.register_lib.register_user.restype = c_int
 
         # =============== Left Panel ===============
@@ -71,9 +83,11 @@ class RegisterScreen(QWidget):
         logo_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         # Add welcome text
-        welcome_text = QLabel("Welcome to the u-sell-it app!\nYour trusted local marketplace.\nBuy. Sell. Trade. Simple and secure.\n\n" \
-            "\nCreate your free account to start listing items, \nbrowsing local deals, and connecting with trusted\nbuyers and sellers in your " \
-            "community. Registration\nonly takes a minute and you'll be ready to\nroll the dice on your next great find.")
+        welcome_text = QLabel(
+            "Welcome to the u-sell-it app!\nYour trusted local marketplace.\nBuy. Sell. Trade. Simple and secure.\n\n"
+            "\nCreate your free account to start listing items, \nbrowsing local deals, and connecting with trusted\nbuyers and sellers in your "
+            "community. Registration\nonly takes a minute and you'll be ready to\nroll the dice on your next great find."
+        )
         welcome_text.setAlignment(Qt.AlignmentFlag.AlignCenter)
         welcome_text.setStyleSheet("font-size: 18px; font-weight: bold; color: #444;")
 
@@ -91,7 +105,9 @@ class RegisterScreen(QWidget):
 
         # Add "Form" header
         form_header = QLabel("Registration Form")
-        form_header.setStyleSheet("font-size: 32px; font-weight: bold; color: #444; margin-bottom: 10px;")
+        form_header.setStyleSheet(
+            "font-size: 32px; font-weight: bold; color: #444; margin-bottom: 10px;"
+        )
         form_header.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         # =============== Form Layout ========================
@@ -121,10 +137,10 @@ class RegisterScreen(QWidget):
         self.last_name.setStyleSheet("font-size: 13px")
         last_name_col.addWidget(last_label)
         last_name_col.addWidget(self.last_name)
-        
+
         # Add both columns side by side
         name_row.addLayout(first_name_col)
-        name_row.addSpacing(20)                 # Space between first and last name
+        name_row.addSpacing(20)  # Space between first and last name
         name_row.addLayout(last_name_col)
 
         name_widget = QWidget()
@@ -192,10 +208,10 @@ class RegisterScreen(QWidget):
         self.state.setStyleSheet("font-size: 13px")
         state_col.addWidget(state_label)
         state_col.addWidget(self.state)
-        
+
         # Add both columns side by side
         city_state_row.addLayout(city_col)
-        city_state_row.addSpacing(20)                 # Space between first and last name
+        city_state_row.addSpacing(20)  # Space between first and last name
         city_state_row.addLayout(state_col)
 
         city_state_widget = QWidget()
@@ -227,10 +243,10 @@ class RegisterScreen(QWidget):
         self.phone.setStyleSheet("font-size: 13px")
         phone_col.addWidget(phone_label)
         phone_col.addWidget(self.phone)
-        
+
         # Add both columns side by side
         zip_phone_row.addLayout(zip_col)
-        zip_phone_row.addSpacing(20)                 # Space between first and last name
+        zip_phone_row.addSpacing(20)  # Space between first and last name
         zip_phone_row.addLayout(phone_col)
 
         zip_dob_widget = QWidget()
@@ -280,10 +296,10 @@ class RegisterScreen(QWidget):
         self.confirm.setStyleSheet("font-size: 13px")
         confirm_col.addWidget(confirm_label)
         confirm_col.addWidget(self.confirm)
-        
+
         # Add both columns side by side
         password_confirm_row.addLayout(password_col)
-        password_confirm_row.addSpacing(20)                 # Space between first and last name
+        password_confirm_row.addSpacing(20)  # Space between first and last name
         password_confirm_row.addLayout(confirm_col)
 
         password_confirm_widget = QWidget()
@@ -294,7 +310,8 @@ class RegisterScreen(QWidget):
         # ============ Confirm Button =================
         self.confirm_btn = QPushButton("Confirm")
         self.confirm_btn.setFixedWidth(120)
-        self.confirm_btn.setStyleSheet("""
+        self.confirm_btn.setStyleSheet(
+            """
             QPushButton {
                 background-color: #0078D7;
                 color: white;
@@ -310,7 +327,8 @@ class RegisterScreen(QWidget):
                 padding-top: 7px;
                 padding-bottom: 5px;
             }
-        """)
+        """
+        )
         self.confirm_btn.setCursor(Qt.CursorShape.PointingHandCursor)
         btn_layout = QHBoxLayout()
         btn_layout.addStretch()
@@ -321,11 +339,8 @@ class RegisterScreen(QWidget):
 
         self.confirm_btn.clicked.connect(self.handle_register)
 
-
         # Add spacing between header and form
         right_panel.addWidget(form_header)
-
-        
 
         right_panel.addLayout(form_layout)
 
@@ -343,8 +358,8 @@ class RegisterScreen(QWidget):
 
 
 # Entry point for launching the application
-if __name__ == "__main__":          
-    app = QApplication(sys.argv)    # Create the applicatoin object
-    window = RegisterScreen()          # Instantiate the login screen
-    window.show()                   # Display the window
-    sys.exit(app.exec())            # Start the even loop and exit cleanly
+if __name__ == "__main__":
+    app = QApplication(sys.argv)  # Create the applicatoin object
+    window = RegisterScreen()  # Instantiate the login screen
+    window.show()  # Display the window
+    sys.exit(app.exec())  # Start the even loop and exit cleanly
