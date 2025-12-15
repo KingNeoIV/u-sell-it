@@ -10,7 +10,7 @@ from PyQt6.QtWidgets import (
     QFormLayout,
     QMessageBox,
 )
-from PyQt6.QtGui import QIcon
+from PyQt6.QtGui import QIcon, QShortcut
 from PyQt6.QtCore import Qt
 
 #
@@ -19,6 +19,10 @@ import os, sys
 
 
 class RegisterScreen(QWidget):
+    def keyPressEvent(self, event):
+        if event.key() == Qt.Key.Key_Escape:
+            self.close()
+
     def handle_register(self):
         # check password confirmation
         if self.password.text() != self.confirm.text():
@@ -337,6 +341,8 @@ class RegisterScreen(QWidget):
 
         form_layout.addRow(btn_layout)
 
+        QShortcut(Qt.Key.Key_Return, self.confirm_btn, activated=self.confirm_btn.click)
+        QShortcut(Qt.Key.Key_Enter, self.confirm_btn, activated=self.confirm_btn.click)
         self.confirm_btn.clicked.connect(self.handle_register)
 
         # Add spacing between header and form

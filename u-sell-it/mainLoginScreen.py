@@ -21,15 +21,7 @@ import sys
 class LoginScreen(QWidget):
     def keyPressEvent(self, event):
         if event.key() == Qt.Key.Key_Escape:
-            reply = QMessageBox.question
-            (
-                self,
-                "Exit Application",
-                "Are you sure you want to exit?",
-                QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
-            )
-            if reply == QMessageBox.StandardButton.Yes:
-                self.close()
+            self.close()
 
     def handle_login(self):
         username = self.username.text().encode("utf-8")

@@ -2,11 +2,16 @@
 #include <cctype>
 #include <cstdlib>
 #include <cstring>
+#include <ctime>
 #include <fstream>
 #include <iostream>
 #include <nlohmann/json.hpp>
 #include <pqxx/pqxx>
 #include <string>
+
+// Global storage for demo code and timestamp
+static std::string last_demo_code;
+static std::time_t last_demo_timestamp;
 
 // ================= Input Validation =================
 class InputValidator {
@@ -59,7 +64,17 @@ public:
     }
     return has_upper && has_lower && has_digit && has_special;
   }
+
+  static bool isPhone(const std::string &s);
 };
+
+// ================= Phone Validation =================
+#include <regex>
+bool InputValidator::isPhone(const std::string &s) {
+  // Accepts numbers like "1234567890" or "+123456789012"
+  static const std::regex phoneRegex(R"(^\+?[0-9]{10,15}$)");
+  return std::regex_match(s, phoneRegex);
+}
 
 // ================= Database Connector =================
 class DatabaseConnector {
@@ -151,5 +166,139 @@ extern "C" __declspec(dllexport) int register_user(
   } catch (const std::exception &e) {
     std::cerr << "Database error: " << e.what() << std::endl;
     return 0;
+  }
+}
+
+// ================= Email/Phone Validation Function =================
+extern "C" __declspec(dllexport) int validate_contact(const char *contact) {
+  try {
+    // Basic format validation first: must be either email OR phone
+    bool isEmail = InputValidator::isEmail(contact);
+    bool isPhone =
+        InputValidator::isPhone(contact); // <-- you need to implement this
+
+    if (!isEmail && !isPhone) {
+      return 0; // invalid format
+    }
+
+    pqxx::connection conn = DatabaseConnector::getConnection();
+    pqxx::work txn(conn);
+
+    // Query depending on type
+    pqxx::result result;
+    if (isEmail) {
+      result = txn.exec("SELECT user_id FROM users WHERE email = " +
+                        txn.quote(contact) + " LIMIT 1");
+    } else if (isPhone) {
+      result = txn.exec("SELECT user_id FROM users WHERE phone = " +
+                        txn.quote(contact) + " LIMIT 1");
+    }
+
+    txn.commit();
+    return !result.empty() ? 1 : 0;
+
+  } catch (const std::exception &e) {
+    std::cerr << "Database error: " << e.what() << std::endl;
+    return 0;
+  }
+}
+
+// ================= Demo Code Generator =================
+extern "C" __declspec(dllexport) const char *generate_demo_code() {
+  try {
+    // Seed RNG once per process
+    std::srand(static_cast<unsigned int>(std::time(nullptr)));
+
+    // Generate random 6-digit code
+    int code = 100000 + (std::rand() % 900000); // ensures 6 digits
+    last_demo_code = std::to_string(code);
+
+    // Save timestamp
+    last_demo_timestamp = std::time(nullptr);
+
+    // Log for debugging (optional)
+    std::cout << "Generated demo code: " << last_demo_code << " at "
+              << std::ctime(&last_demo_timestamp) << std::endl;
+
+    // Return C-string pointer (safe because last_demo_code is static)
+    return last_demo_code.c_str();
+  } catch (const std::exception &e) {
+    std::cerr << "Error generating demo code: " << e.what() << std::endl;
+    return nullptr;
+  }
+}
+
+// ================= Demo Code Validation =================
+extern "C" __declspec(dllexport) int validate_demo_code(const char *input) {
+  try {
+    std::time_t now = std::time(nullptr);
+
+    // Expire after 90 seconds
+    if (difftime(now, last_demo_timestamp) > 90) {
+      return 0; // expired
+    }
+
+    // Compare with stored code
+    return (last_demo_code == input) ? 1 : 0;
+  } catch (const std::exception &e) {
+    std::cerr << "Error validating demo code: " << e.what() << std::endl;
+    return 0;
+  }
+}
+
+// ================= Demo Code Remaining Time =================
+extern "C" __declspec(dllexport) int get_demo_code_remaining_time() {
+  try {
+    std::time_t now = std::time(nullptr);
+    int elapsed = static_cast<int>(difftime(now, last_demo_timestamp));
+    int remaining = 90 - elapsed;
+    return (remaining > 0) ? remaining : 0;
+  } catch (const std::exception &e) {
+    std::cerr << "Error getting remaining time: " << e.what() << std::endl;
+    return 0;
+  }
+}
+
+// ================= Password Update by Contact =================
+extern "C" __declspec(dllexport) int update_password_by_contact(
+    const char *contact, const char *new_password,
+    const char *confirm_password) {
+  try {
+    std::string newPass(new_password);
+    std::string confirmPass(confirm_password);
+
+    // Validation checks
+    if (newPass.empty() || confirmPass.empty())
+      return -1;
+    if (newPass != confirmPass)
+      return -2;
+    if (newPass.length() < 8)
+      return -3;
+    if (!InputValidator::isStrongPassword(newPass))
+      return -4;
+
+    pqxx::connection conn = DatabaseConnector::getConnection();
+    pqxx::work txn(conn);
+
+    bool isEmail = InputValidator::isEmail(contact);
+    bool isPhone = InputValidator::isPhone(contact);
+    if (!isEmail && !isPhone)
+      return -5;
+
+    std::string query;
+    if (isEmail) {
+      query = "UPDATE users SET password = " + txn.quote(newPass) +
+              " WHERE email = " + txn.quote(contact);
+    } else {
+      query = "UPDATE users SET password = " + txn.quote(newPass) +
+              " WHERE phone = " + txn.quote(contact);
+    }
+
+    txn.exec(query);
+    txn.commit();
+    return 1; // Success
+  } catch (const std::exception &e) {
+    std::cerr << "Database error: " << e.what() << std::endl;
+    return 0; // General failure
   }
 }
