@@ -7,31 +7,38 @@
 #include <iostream>
 #include <nlohmann/json.hpp>
 #include <pqxx/pqxx>
+#include <regex>
 #include <string>
+
 
 // Global storage for demo code and timestamp
 static std::string last_demo_code;
 static std::time_t last_demo_timestamp;
 
 // ================= Input Validation =================
+// Utility class static methods to validate strings
 class InputValidator {
 public:
+  // Check if string is alphabetic and at least 2 char
   static bool isAlphaStr(const std::string &s) {
     return s.length() >= 2 &&
            std::all_of(s.begin(), s.end(),
                        [](unsigned char c) { return std::isalpha(c); });
   }
 
+  // Check if string is a valid address (letters, digits, spaces, #, -)
   static bool isAddressStr(const std::string &s) {
     return !s.empty() && std::all_of(s.begin(), s.end(), [](unsigned char c) {
       return std::isalnum(c) || std::isspace(c) || c == '#' || c == '-';
     });
   }
 
+  // Check if string is all digits of a given length
   static bool isDigitStr(const std::string &s, size_t length) {
     return s.length() == length && std::all_of(s.begin(), s.end(), ::isdigit);
   }
 
+  // Basic email validation: must contain '@' and '.' after '@'
   static bool isEmail(const std::string &s) {
     auto at = s.find('@');
     auto dot = s.find('.', at);
@@ -39,6 +46,8 @@ public:
            s.find(' ') == std::string::npos;
   }
 
+  // Username must start with a letter, be >= 4 chars, and contain only alnum or
+  // '_'
   static bool isUsername(const std::string &s) {
     if (s.length() < 4 || !std::isalpha(s[0]))
       return false;
@@ -47,6 +56,7 @@ public:
     });
   }
 
+  // Strong password: >= 8 chars, contains upper, lower, digit, special
   static bool isStrongPassword(const std::string &s) {
     if (s.length() < 8)
       return false;
@@ -65,18 +75,19 @@ public:
     return has_upper && has_lower && has_digit && has_special;
   }
 
+  // Phone validation declared here, defined below
   static bool isPhone(const std::string &s);
 };
 
 // ================= Phone Validation =================
-#include <regex>
 bool InputValidator::isPhone(const std::string &s) {
   // Accepts numbers like "1234567890" or "+123456789012"
   static const std::regex phoneRegex(R"(^\+?[0-9]{10,15}$)");
   return std::regex_match(s, phoneRegex);
 }
 
-// ================= Database Connector =================
+// ================= Database Connector ================
+// Reads db_config.json and builds a PostgreSQL connection string
 class DatabaseConnector {
 public:
   static pqxx::connection getConnection() {
@@ -95,24 +106,29 @@ public:
 };
 
 // ================= Exported Functions =================
+// DLL entry points callable from Python
+
+// --- Login validation ---
 extern "C" __declspec(dllexport) int validate_login(const char *username,
                                                     const char *password) {
   try {
     pqxx::connection conn = DatabaseConnector::getConnection();
     pqxx::work txn(conn);
 
+    // Query for matching username/password
     pqxx::result result = txn.exec(
         "SELECT user_id FROM users WHERE username = " + txn.quote(username) +
         " AND password = " + txn.quote(password));
 
     txn.commit();
-    return !result.empty() ? 1 : 0;
+    return !result.empty() ? 1 : 0; // 1 = sucess, 0 = failure
   } catch (const std::exception &e) {
     std::cerr << "Database error: " << e.what() << std::endl;
     return 0;
   }
 }
 
+// --- User registration ---
 extern "C" __declspec(dllexport) int register_user(
     const char *first_name, const char *last_name, const char *street_address,
     const char *city, const char *state, const char *zip_code,
@@ -121,7 +137,7 @@ extern "C" __declspec(dllexport) int register_user(
   std::string user(username);
   std::string pass(password);
 
-  // Run validations
+  // Run validations on all fields
   if (!InputValidator::isAlphaStr(first_name) ||
       !InputValidator::isAlphaStr(last_name))
     return 0;
@@ -169,7 +185,7 @@ extern "C" __declspec(dllexport) int register_user(
   }
 }
 
-// ================= Email/Phone Validation Function =================
+// ================= Contact validation (email or phone) =================
 extern "C" __declspec(dllexport) int validate_contact(const char *contact) {
   try {
     // Basic format validation first: must be either email OR phone
@@ -195,7 +211,7 @@ extern "C" __declspec(dllexport) int validate_contact(const char *contact) {
     }
 
     txn.commit();
-    return !result.empty() ? 1 : 0;
+    return !result.empty() ? 1 : 0; // 1 = exits, 0 = not found
 
   } catch (const std::exception &e) {
     std::cerr << "Database error: " << e.what() << std::endl;
@@ -204,6 +220,7 @@ extern "C" __declspec(dllexport) int validate_contact(const char *contact) {
 }
 
 // ================= Demo Code Generator =================
+// Generates a random 6-digit code and stores it with a timestamp
 extern "C" __declspec(dllexport) const char *generate_demo_code() {
   try {
     // Seed RNG once per process
@@ -229,6 +246,7 @@ extern "C" __declspec(dllexport) const char *generate_demo_code() {
 }
 
 // ================= Demo Code Validation =================
+// Validates the demo verification code entered by the user
 extern "C" __declspec(dllexport) int validate_demo_code(const char *input) {
   try {
     std::time_t now = std::time(nullptr);
@@ -239,7 +257,7 @@ extern "C" __declspec(dllexport) int validate_demo_code(const char *input) {
     }
 
     // Compare with stored code
-    return (last_demo_code == input) ? 1 : 0;
+    return (last_demo_code == input) ? 1 : 0; // 1 = valid, 0 = invalid
   } catch (const std::exception &e) {
     std::cerr << "Error validating demo code: " << e.what() << std::endl;
     return 0;
@@ -247,11 +265,14 @@ extern "C" __declspec(dllexport) int validate_demo_code(const char *input) {
 }
 
 // ================= Demo Code Remaining Time =================
+// Returns how many seconds are left before the demo code expires
 extern "C" __declspec(dllexport) int get_demo_code_remaining_time() {
   try {
     std::time_t now = std::time(nullptr);
     int elapsed = static_cast<int>(difftime(now, last_demo_timestamp));
     int remaining = 90 - elapsed;
+
+    // If still valid, return remaining seconds; otherwise return 0
     return (remaining > 0) ? remaining : 0;
   } catch (const std::exception &e) {
     std::cerr << "Error getting remaining time: " << e.what() << std::endl;
@@ -260,6 +281,7 @@ extern "C" __declspec(dllexport) int get_demo_code_remaining_time() {
 }
 
 // ================= Password Update by Contact =================
+// Update a user's password based on their email or phone number
 extern "C" __declspec(dllexport) int update_password_by_contact(
     const char *contact, const char *new_password,
     const char *confirm_password) {
@@ -269,21 +291,22 @@ extern "C" __declspec(dllexport) int update_password_by_contact(
 
     // Validation checks
     if (newPass.empty() || confirmPass.empty())
-      return -1;
+      return -1; // missing fields
     if (newPass != confirmPass)
-      return -2;
+      return -2; // mismatch
     if (newPass.length() < 8)
-      return -3;
+      return -3; // too short
     if (!InputValidator::isStrongPassword(newPass))
-      return -4;
+      return -4; // not strong enough
 
     pqxx::connection conn = DatabaseConnector::getConnection();
     pqxx::work txn(conn);
 
+    // Determin if contact is email or phone
     bool isEmail = InputValidator::isEmail(contact);
     bool isPhone = InputValidator::isPhone(contact);
     if (!isEmail && !isPhone)
-      return -5;
+      return -5; // invalid contact format
 
     std::string query;
     if (isEmail) {
@@ -294,6 +317,7 @@ extern "C" __declspec(dllexport) int update_password_by_contact(
               " WHERE phone = " + txn.quote(contact);
     }
 
+    // Build update query based on contact type
     txn.exec(query);
     txn.commit();
     return 1; // Success
