@@ -1,20 +1,91 @@
-// auth_logic.cpp
+#include <algorithm>
 #include <cctype>
+#include <cstdlib>
 #include <cstring>
+#include <fstream>
 #include <iostream>
+#include <nlohmann/json.hpp>
 #include <pqxx/pqxx>
 #include <string>
 
+// ================= Input Validation =================
+class InputValidator {
+public:
+  static bool isAlphaStr(const std::string &s) {
+    return s.length() >= 2 &&
+           std::all_of(s.begin(), s.end(),
+                       [](unsigned char c) { return std::isalpha(c); });
+  }
+
+  static bool isAddressStr(const std::string &s) {
+    return !s.empty() && std::all_of(s.begin(), s.end(), [](unsigned char c) {
+      return std::isalnum(c) || std::isspace(c) || c == '#' || c == '-';
+    });
+  }
+
+  static bool isDigitStr(const std::string &s, size_t length) {
+    return s.length() == length && std::all_of(s.begin(), s.end(), ::isdigit);
+  }
+
+  static bool isEmail(const std::string &s) {
+    auto at = s.find('@');
+    auto dot = s.find('.', at);
+    return at != std::string::npos && dot != std::string::npos &&
+           s.find(' ') == std::string::npos;
+  }
+
+  static bool isUsername(const std::string &s) {
+    if (s.length() < 4 || !std::isalpha(s[0]))
+      return false;
+    return std::all_of(s.begin(), s.end(), [](unsigned char c) {
+      return std::isalnum(c) || c == '_';
+    });
+  }
+
+  static bool isStrongPassword(const std::string &s) {
+    if (s.length() < 8)
+      return false;
+    bool has_upper = false, has_lower = false, has_digit = false,
+         has_special = false;
+    for (char ch : s) {
+      if (std::isupper(ch))
+        has_upper = true;
+      else if (std::islower(ch))
+        has_lower = true;
+      else if (std::isdigit(ch))
+        has_digit = true;
+      else if (std::ispunct(ch))
+        has_special = true;
+    }
+    return has_upper && has_lower && has_digit && has_special;
+  }
+};
+
+// ================= Database Connector =================
+class DatabaseConnector {
+public:
+  static pqxx::connection getConnection() {
+    std::ifstream file("db_config.json");
+    nlohmann::json config;
+    file >> config;
+
+    std::string conn_str = "host=" + config["DB_HOST"].get<std::string>() +
+                           " port=" + config["DB_PORT"].get<std::string>() +
+                           " dbname=" + config["DB_NAME"].get<std::string>() +
+                           " user=" + config["DB_USER"].get<std::string>() +
+                           " password=" + config["DB_PASS"].get<std::string>();
+
+    return pqxx::connection(conn_str);
+  }
+};
+
+// ================= Exported Functions =================
 extern "C" __declspec(dllexport) int validate_login(const char *username,
                                                     const char *password) {
   try {
-    pqxx::connection conn("host= "    // Enter the database ip address HERE
-                          "dbname= "  // Enter the name of the database HERE
-                          "user= "    // Enter the admin/user
-                          "password=" // Enter password for admin/user
-    );
-
+    pqxx::connection conn = DatabaseConnector::getConnection();
     pqxx::work txn(conn);
+
     pqxx::result result = txn.exec(
         "SELECT user_id FROM users WHERE username = " + txn.quote(username) +
         " AND password = " + txn.quote(password));
@@ -23,7 +94,7 @@ extern "C" __declspec(dllexport) int validate_login(const char *username,
     return !result.empty() ? 1 : 0;
   } catch (const std::exception &e) {
     std::cerr << "Database error: " << e.what() << std::endl;
-    return 0; // Connection or query failed
+    return 0;
   }
 }
 
@@ -35,90 +106,30 @@ extern "C" __declspec(dllexport) int register_user(
   std::string user(username);
   std::string pass(password);
 
-  // Username must be at least 4 characters
-  if (user.length() < 4 || !std::isalpha(user[0]) || pass.length() <= 6)
+  // Run validations
+  if (!InputValidator::isAlphaStr(first_name) ||
+      !InputValidator::isAlphaStr(last_name))
     return 0;
-
-  bool has_letter = false, has_digit = false, has_special = false;
-  for (char ch : pass) {
-    if (std::isalpha(ch))
-      has_letter = true;
-    else if (std::isdigit(ch))
-      has_digit = true;
-    else if (std::ispunct(ch))
-      has_special = true;
-  }
-  if (!has_letter || !has_digit || !has_special)
+  if (!InputValidator::isAddressStr(street_address))
     return 0;
-
-  // ============ Field Validation ============
-  auto is_alpha_str = [](const std::string &s) {
-    return !s.empty() && std::all_of(s.begin(), s.end(), [](unsigned char c) {
-      return std::isalpha(c);
-    });
-  };
-
-  auto is_digit_str = [](const std::string &s) {
-    return !s.empty() && std::all_of(s.begin(), s.end(), [](unsigned char c) {
-      return std::isdigit(c);
-    });
-  };
-
-  // First/Last name
-  if (!is_alpha_str(first_name) || !is_alpha_str(last_name))
+  if (!InputValidator::isAlphaStr(city) || !InputValidator::isAlphaStr(state))
     return 0;
-
-  // Street address (basic non-empty check)
-  if (std::string(street_address).empty())
+  if (!InputValidator::isDigitStr(zip_code, 5))
     return 0;
-
-  // City/State
-  if (!is_alpha_str(city) || !is_alpha_str(state))
+  if (!InputValidator::isDigitStr(phone, 10))
     return 0;
-
-  // Zip code (5 digits)
-  if (!is_digit_str(zip_code) || std::string(zip_code).length() != 5)
+  if (!InputValidator::isEmail(email))
     return 0;
-
-  // Phone (10 digits)
-  if (!is_digit_str(phone) || std::string(phone).length() != 10)
+  if (!InputValidator::isUsername(user))
     return 0;
-
-  // Email (basic check)
-  std::string mail(email);
-  if (mail.find('@') == std::string::npos ||
-      mail.find('.') == std::string::npos)
-    return 0;
-
-  // Username must be at least 4 chars and contain letter, digit, special char
-  if (user.length() < 4 || !std::isalpha(user[0]))
-    return 0;
-
-  // Password must be > 6 chars and contain letter, digit, special
-  if (pass.length() <= 6)
-    return 0;
-  bool has_letter = false, has_digit = false, has_special = false;
-  for (char ch : pass) {
-    if (std::isalpha(ch))
-      has_letter = true;
-    else if (std::isdigit(ch))
-      has_digit = true;
-    else if (std::ispunct(ch))
-      has_special = true;
-  }
-  if (!has_letter || !has_digit || !has_special)
+  if (!InputValidator::isStrongPassword(pass))
     return 0;
 
   try {
-    pqxx::connection conn("host= "    // Enter the database ip address HERE
-                          "dbname= "  // Enter the name of the database HERE
-                          "user= "    // Enter the admin/user
-                          "password=" // Enter password for admin/user
-    );
-
+    pqxx::connection conn = DatabaseConnector::getConnection();
     pqxx::work txn(conn);
 
-    // Check if username or email already exits
+    // Check if username or email already exists
     pqxx::result check = txn.exec(
         "SELECT user_id FROM users WHERE username = " + txn.quote(username) +
         " OR email = " + txn.quote(email));
@@ -138,6 +149,7 @@ extern "C" __declspec(dllexport) int register_user(
     txn.commit();
     return 1; // Success
   } catch (const std::exception &e) {
-    return 0; // Registration failed
+    std::cerr << "Database error: " << e.what() << std::endl;
+    return 0;
   }
 }
