@@ -13,3 +13,6 @@ __pycache__/
 
 # Ignore watcher.py
 watcher.py
+
+# Ignore the db_config
+db_config.json
