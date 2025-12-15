@@ -10,6 +10,7 @@ from PyQt6.QtWidgets import (
 )
 
 from registerUI import RegisterScreen
+from forgot_passwordUI import ForgotPasswordUI
 from PyQt6.QtGui import QPixmap, QIcon
 from PyQt6.QtCore import Qt
 from ctypes import cdll, c_char_p, c_int
@@ -45,6 +46,10 @@ class LoginScreen(QWidget):
     def open_register_screen(self):
         self.register_window = RegisterScreen()
         self.register_window.show()
+
+    def open_forgot_password_screen(self):
+        self.forgot_window = ForgotPasswordUI()
+        self.forgot_window.show()
 
     def __init__(self):
         super().__init__()
@@ -219,7 +224,7 @@ class LoginScreen(QWidget):
         )
         self.forgot_btn.setCursor(Qt.CursorShape.PointingHandCursor)
         button_row.addWidget(self.forgot_btn)
-        self.forgot_btn.clicked.connect(self.handle_login)
+        self.forgot_btn.clicked.connect(self.open_forgot_password_screen)
 
         login_layout.addLayout(button_row)
 
