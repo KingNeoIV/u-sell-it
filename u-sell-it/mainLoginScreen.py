@@ -13,6 +13,7 @@ from PyQt6.QtWidgets import (
 
 # Import other UI screens
 
+from mainWindow import MainWindow
 from registerUI import RegisterScreen
 from forgot_passwordUI import ForgotPasswordUI
 
@@ -51,6 +52,12 @@ class LoginScreen(QWidget):
 
         if result == 1:
             QMessageBox.information(self, "Login", "Login successful!")
+
+            # Close login window and open main window
+
+            self.close()
+            self.main_window = MainWindow()
+            self.main_window.show()
 
         else:
             QMessageBox.warning(self, "Login", "Invalid username or password.")
