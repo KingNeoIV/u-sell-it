@@ -44,10 +44,10 @@
 | Platform         | Status      | Notes                           |
 | ---------------- | ----------- | ------------------------------- |
 | **Windows**      | ✔ Supported | Primary development environment |
-| **macOS**        | ✔ Supported | Backend + future desktop client |
+| **macOS**        | ✔ Planned | Backend + future desktop client |
 | **iPhone (iOS)** | ✔ Planned   | React Native or SwiftUI client  |
 | **Android**      | ✔ Planned   | React Native or Flutter client  |
-| **Linux**        | ✔ Supported | Backend + server deployment     |
+| **Linux**        | ✔ Planned | Backend + server deployment     |
 
 </div>
 
