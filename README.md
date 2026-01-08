@@ -1,201 +1,174 @@
-Absolutely — here is the **full README in clean Markdown**, ready for you to copy and paste directly into your `README.md` file.
+<!-- HERO SECTION -->
+<div align="center">
 
-No extra formatting, no commentary — just pure Markdown.
+<br>
 
----
+<img src="https://img.shields.io/badge/u--sell--it-Marketplace%20Platform-6C63FF?style=for-the-badge&logo=python&logoColor=white" />
 
-```markdown
-# 🛍️ u‑sell‑it
+# 🛍️ **u‑sell‑it**
 
-### Modern Full‑Stack Marketplace Platform (FastAPI • React • PostgreSQL)
+### A Modern Marketplace Platform
 
-### + Legacy Desktop Prototype (PyQt6 • C++)
+**FastAPI • React • PostgreSQL • Docker**  
+**+ Legacy Desktop Prototype (PyQt6 • C++)**
 
-u‑sell‑it is evolving from a standalone desktop prototype into a modern, industry‑standard full‑stack application. This repository now contains:
+<br>
 
-- A new full‑stack architecture using FastAPI, React, PostgreSQL, and Docker
-- A preserved desktop‑legacy version built with PyQt6 and C++
-- A clean, scalable structure designed for real‑world development and deployment
+<img src="https://img.shields.io/badge/Status-Active-brightgreen?style=flat-square" />
+<img src="https://img.shields.io/badge/License-MIT-blue?style=flat-square" />
+<img src="https://img.shields.io/badge/Python-3.12-yellow?style=flat-square&logo=python" />
+<img src="https://img.shields.io/badge/FastAPI-Ready-009688?style=flat-square&logo=fastapi" />
+<img src="https://img.shields.io/badge/React-Incoming-61DAFB?style=flat-square&logo=react" />
 
-This README explains the new architecture, how to run everything, and how the project is structured.
+<br><br>
 
----
-
-# 🚀 Project Overview
-
-u‑sell‑it is a marketplace platform designed to support:
-
-- User accounts
-- Item listings
-- Local buying/selling
-- Future mobile support (Android)
-- Future desktop support (Tauri/Electron)
-
-The project is currently in active redevelopment using a modern, scalable stack.
+</div>
 
 ---
 
-# 🧱 Tech Stack (2025 Industry Standard)
+<!-- INTRO -->
+<div align="center">
 
-### **Frontend**
+### ⚡ A full‑stack rebuild of the original desktop prototype
 
-- React
-- TypeScript
-- Tailwind CSS
-- Vite
+### ⚡ Designed for scalability, performance, and modern development
 
-### **Backend**
+### ⚡ Built for Windows, Linux, and future Android support
 
-- FastAPI
-- SQLAlchemy 2.0
-- Alembic
-- JWT Authentication
-- Pydantic v2
-
-### **Database**
-
-- PostgreSQL (via Docker)
-
-### **DevOps**
-
-- Docker
-- Docker Compose
-- Environment‑based configuration
-
-### **Legacy Desktop App**
-
-- PyQt6
-- C++ backend logic (.dll / .so)
-- PostgreSQL (local)
+</div>
 
 ---
 
-# 📁 Repository Structure
-```
+# 🎨 **Project Vision**
 
+u‑sell‑it is transforming from a standalone PyQt6 desktop app into a **full‑stack, production‑ready marketplace platform** with:
+
+- 🔐 Secure authentication
+- 🛒 Item listings
+- 📦 Local buying/selling
+- 📱 Future Android client
+- 🖥️ Future desktop client (Tauri/Electron)
+- 🧱 Clean, scalable architecture
+
+This repo now contains **both** the legacy desktop version and the new modern stack.
+
+---
+
+# 🧱 **Tech Stack**
+
+<div align="center">
+
+| Layer          | Technologies                          |
+| -------------- | ------------------------------------- |
+| **Frontend**   | React, TypeScript, Tailwind, Vite     |
+| **Backend**    | FastAPI, SQLAlchemy 2.0, Alembic, JWT |
+| **Database**   | PostgreSQL (Docker)                   |
+| **DevOps**     | Docker, Docker Compose                |
+| **Legacy App** | PyQt6, C++, PostgreSQL                |
+
+</div>
+
+---
+
+# 📁 **Repository Structure**
+
+```text
 u-sell-it/
 │
-├── backend/ # FastAPI backend (new)
-│ ├── app/
-│ ├── alembic/
-│ ├── requirements.txt
-│ ├── Dockerfile
-│ └── README.md
+├── backend/                 # FastAPI backend (new)
+│   ├── app/
+│   ├── alembic/
+│   ├── requirements.txt
+│   ├── Dockerfile
+│   └── README.md
 │
-├── frontend/ # React + TypeScript frontend (coming soon)
-│ ├── src/
-│ ├── public/
-│ └── package.json
+├── frontend/                # React + TypeScript frontend (coming soon)
+│   ├── src/
+│   ├── public/
+│   └── package.json
 │
-├── desktop-legacy/ # Original PyQt6 + C++ prototype
-│ ├── main.py
-│ ├── assets/
-│ ├── schema/
-│ ├── DLL Files/
-│ ├── linuxDemo/
-│ ├── requirements.txt
-│ └── README.md
+├── desktop-legacy/          # Original PyQt6 + C++ prototype
+│   ├── main.py
+│   ├── assets/
+│   ├── schema/
+│   ├── DLL Files/
+│   ├── linuxDemo/
+│   ├── requirements.txt
+│   └── README.md
 │
-├── docker-compose.yml # Runs backend + database (+ frontend later)
-├── .env # Environment variables (not committed)
-└── README.md # You are here
-
-````
+├── docker-compose.yml       # Runs backend + database (+ frontend later)
+├── .env                     # Environment variables (not committed)
+└── README.md                # You are here
+```
 
 ---
 
-# 🔐 Backend Features (FastAPI)
+# 🔐 **Backend Features (FastAPI)**
 
-The backend includes:
+### **Authentication**
 
-### ✔ Email‑based authentication
-- Register
+- Email‑based registration
 - Login
 - JWT access token (24 hours)
 - JWT refresh token (90 days)
 - Password hashing (bcrypt)
 
-### ✔ User system
+### **User System**
+
 - Create user
 - Fetch user
 - Protected routes (coming soon)
 
-### ✔ Item system (starter)
+### **Item System**
+
 - Create item
 - List items
 - Item ownership
 
-### ✔ Database
+### **Database**
+
 - PostgreSQL
-- SQLAlchemy 2.0 models
+- SQLAlchemy 2.0
 - Alembic migrations
 
-### ✔ API Documentation
-FastAPI automatically generates:
+### **API Docs**
 
-- `/docs` (Swagger UI)
-- `/redoc` (ReDoc)
+- `/docs` → Swagger UI
+- `/redoc` → ReDoc
 
 ---
 
-# 🛠️ Running the Backend (Windows)
-
-### 1. Navigate to backend folder
+# 🛠️ **Running the Backend (Windows)**
 
 ```bash
 cd backend
-````
-
-### 2. Create and activate virtual environment
-
-```bash
 python -m venv venv
 venv\Scripts\activate
-```
-
-### 3. Install dependencies
-
-```bash
 pip install -r requirements.txt
-```
-
-### 4. Copy environment template
-
-```bash
 copy .env.example .env
-```
-
-### 5. Start FastAPI
-
-```bash
 uvicorn app.main:app --reload
 ```
 
-### 6. Open API docs
-
-```
-http://127.0.0.1:8000/docs
-```
+Open API docs:  
+👉 http://127.0.0.1:8000/docs
 
 ---
 
-# 🐳 Running Backend + PostgreSQL via Docker
-
-From the project root:
+# 🐳 **Running Backend + PostgreSQL via Docker**
 
 ```bash
 docker-compose up --build
 ```
 
-This will start:
+This starts:
 
 - PostgreSQL
 - FastAPI backend
-- (Frontend will be added later)
+- (Frontend coming soon)
 
 ---
 
-# 🖥️ Legacy Desktop App (PyQt6 + C++)
+# 🖥️ **Legacy Desktop App (PyQt6 + C++)**
 
 The original standalone desktop prototype is preserved in:
 
@@ -203,7 +176,7 @@ The original standalone desktop prototype is preserved in:
 desktop-legacy/
 ```
 
-It includes:
+Includes:
 
 - PyQt6 UI
 - C++ backend logic
@@ -214,74 +187,49 @@ This version remains functional and serves as a historical reference and portfol
 
 ---
 
-# 📌 Development Roadmap
+# 🗺️ **Development Roadmap**
 
 ### **Phase 1 — Backend Foundation (In Progress)**
 
-✔ FastAPI project structure  
-✔ JWT authentication  
-✔ User model + service  
-✔ Item model + service  
-⬜ Protected routes  
-⬜ Alembic migrations
+- ✔ FastAPI project structure
+- ✔ JWT authentication
+- ✔ User model + service
+- ✔ Item model + service
+- ⬜ Protected routes
+- ⬜ Alembic migrations
 
 ### **Phase 2 — Frontend (React + TypeScript)**
 
-⬜ Project scaffold  
-⬜ Login/Register pages  
-⬜ Auth context  
-⬜ API integration  
-⬜ Item listing UI
+- ⬜ Project scaffold
+- ⬜ Login/Register pages
+- ⬜ Auth context
+- ⬜ API integration
+- ⬜ Item listing UI
 
 ### **Phase 3 — Docker Integration**
 
-⬜ Full stack docker-compose  
-⬜ Production Dockerfiles  
-⬜ Nginx reverse proxy
+- ⬜ Full stack docker-compose
+- ⬜ Production Dockerfiles
+- ⬜ Nginx reverse proxy
 
 ### **Phase 4 — Deployment**
 
-⬜ Deploy backend to Ubuntu VM  
-⬜ Deploy frontend  
-⬜ CI/CD pipeline
+- ⬜ Deploy backend to Ubuntu VM
+- ⬜ Deploy frontend
+- ⬜ CI/CD pipeline
 
 ### **Phase 5 — Mobile App**
 
-⬜ React Native or Flutter client
+- ⬜ React Native or Flutter client
 
 ---
 
-# 🤝 Contributing
+<div align="center">
 
-This project is actively evolving.  
-Contributions, suggestions, and feedback are welcome.
-
----
-
-# 📄 License
-
-MIT License — free to use, modify, and distribute.
-
----
-
-# 🙌 Author
+# 🙌 **Author**
 
 **Michael Rios**  
 Junior Computer Science Major • Full‑Stack Developer • AI Engineer  
 Texas A&M University–Victoria
 
-```
-
----
-
-If you want, I can also generate:
-
-- `backend/README.md`
-- `frontend/README.md`
-- `desktop-legacy/README.md`
-- a `CONTRIBUTING.md`
-- a `CHANGELOG.md`
-- or a GitHub project board layout
-
-Just tell me what you want next.
-```
+</div>
