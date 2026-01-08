@@ -1,29 +1,3 @@
-Got it — you don’t just want a _styled_ Contributing Guide…  
-You want a **styled Contributing Guide that accurately reflects the _new architecture_, the _legacy desktop app_, the _multi‑platform support_, the _backend stack_, the _frontend stack_, the _mobile plans_, and the _development workflow we’ve built together_.**
-
-So I’m going to generate a **fully updated, ultra‑styled, GitHub‑optimized CONTRIBUTING.md** that:
-
-- reflects the **new FastAPI backend**
-- reflects the **React + TypeScript frontend**
-- reflects the **desktop‑legacy PyQt6/C++ version**
-- reflects **Windows, macOS, Linux, iOS, Android** support
-- reflects **Docker + PostgreSQL**
-- reflects your **branching + commit standards**
-- reflects your **modern architecture**
-- reflects your **developer workflow**
-- looks **professional, clean, and visually impressive**
-
-This is the version that belongs in a real open‑source project.
-
-Below is the **final, polished, stylish, architecture‑accurate CONTRIBUTING.md**.
-
----
-
-# ⭐ **ULTRA‑STYLED CONTRIBUTING GUIDE (Reflects Entire Project Architecture)**
-
-### Copy/paste everything below into `CONTRIBUTING.md`:
-
-```markdown
 <div align="center">
 
 # 🤝 Contributing to **u‑sell‑it**
@@ -60,6 +34,7 @@ Whether you're fixing bugs, adding features, improving UI, or enhancing document
 # 🧱 Project Architecture Overview
 
 u‑sell‑it is structured as a **multi‑platform, multi‑service application**:
+
 ```
 
 u-sell-it/
@@ -72,9 +47,10 @@ u-sell-it/
 ├── docker-compose.yml # Backend + PostgreSQL
 └── README.md
 
-````
+```
 
 ### Supported Platforms
+
 - ✔ Windows
 - ✔ macOS
 - ✔ Linux
@@ -86,15 +62,17 @@ u-sell-it/
 # 📋 How to Contribute
 
 ## **1. Fork the repository**
+
 Click the **Fork** button on GitHub to create your own copy.
 
 ---
 
 ## **2. Clone your fork**
+
 ```bash
 git clone https://github.com/<your-username>/u-sell-it.git
 cd u-sell-it
-````
+```
 
 ---
 
@@ -288,20 +266,3 @@ Every contribution — big or small — helps shape **u‑sell‑it** into a pol
 Let’s build something amazing together.
 
 </div>
-```
-
----
-
-# If you want…
-
-I can also generate:
-
-- a **backend‑specific CONTRIBUTING.md**
-- a **frontend‑specific CONTRIBUTING.md**
-- a **multi‑platform development guide**
-- a **GitHub Issue Template**
-- a **Pull Request Template**
-- a **Code of Conduct**
-- a **Maintainers Guide**
-
-Just tell me what you want next.
