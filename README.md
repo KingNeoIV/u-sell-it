@@ -1,4 +1,3 @@
-<!-- HERO SECTION -->
 <div align="center">
 
 <br>
@@ -7,10 +6,10 @@
 
 # 🛍️ **u‑sell‑it**
 
-### A Modern Marketplace Platform
+### A Modern Cross‑Platform Marketplace Platform
 
 **FastAPI • React • PostgreSQL • Docker**  
-**+ Legacy Desktop Prototype (PyQt6 • C++)**
+**PyQt6 • C++ • iOS • Android • macOS • Windows**
 
 <br>
 
@@ -26,16 +25,38 @@
 
 ---
 
-<!-- INTRO -->
 <div align="center">
 
 ### ⚡ A full‑stack rebuild of the original desktop prototype
 
-### ⚡ Designed for scalability, performance, and modern development
+### ⚡ Designed for Windows, macOS, Linux, iPhone (iOS), and Android
 
-### ⚡ Built for Windows, Linux, and future Android support
+### ⚡ Built for scalability, performance, and modern development
 
 </div>
+
+---
+
+# 🌍 **Platform Support**
+
+<div align="center">
+
+| Platform         | Status      | Notes                           |
+| ---------------- | ----------- | ------------------------------- |
+| **Windows**      | ✔ Supported | Primary development environment |
+| **macOS**        | ✔ Supported | Backend + future desktop client |
+| **iPhone (iOS)** | ✔ Planned   | React Native or SwiftUI client  |
+| **Android**      | ✔ Planned   | React Native or Flutter client  |
+| **Linux**        | ✔ Supported | Backend + server deployment     |
+
+</div>
+
+u‑sell‑it is being built as a **true cross‑platform ecosystem**, with:
+
+- A backend that runs on **Windows, macOS, and Linux**
+- A frontend that runs in any modern browser
+- A future mobile app for **iOS and Android**
+- A future desktop app for **macOS and Windows** (Tauri/Electron)
 
 ---
 
@@ -46,11 +67,11 @@ u‑sell‑it is transforming from a standalone PyQt6 desktop app into a **full�
 - 🔐 Secure authentication
 - 🛒 Item listings
 - 📦 Local buying/selling
-- 📱 Future Android client
-- 🖥️ Future desktop client (Tauri/Electron)
+- 📱 Native mobile apps (iOS + Android)
+- 🖥️ Desktop apps (macOS + Windows)
 - 🧱 Clean, scalable architecture
 
-This repo now contains **both** the legacy desktop version and the new modern stack.
+This repo contains **both** the legacy desktop version and the new modern stack.
 
 ---
 
@@ -58,13 +79,14 @@ This repo now contains **both** the legacy desktop version and the new modern st
 
 <div align="center">
 
-| Layer          | Technologies                          |
-| -------------- | ------------------------------------- |
-| **Frontend**   | React, TypeScript, Tailwind, Vite     |
-| **Backend**    | FastAPI, SQLAlchemy 2.0, Alembic, JWT |
-| **Database**   | PostgreSQL (Docker)                   |
-| **DevOps**     | Docker, Docker Compose                |
-| **Legacy App** | PyQt6, C++, PostgreSQL                |
+| Layer          | Technologies                               |
+| -------------- | ------------------------------------------ |
+| **Frontend**   | React, TypeScript, Tailwind, Vite          |
+| **Backend**    | FastAPI, SQLAlchemy 2.0, Alembic, JWT      |
+| **Database**   | PostgreSQL (Docker)                        |
+| **Mobile**     | React Native (iOS + Android) — planned     |
+| **Desktop**    | Tauri/Electron (macOS + Windows) — planned |
+| **Legacy App** | PyQt6, C++, PostgreSQL                     |
 
 </div>
 
@@ -138,14 +160,15 @@ u-sell-it/
 
 ---
 
-# 🛠️ **Running the Backend (Windows)**
+# 🛠️ **Running the Backend (Windows/macOS/Linux)**
 
 ```bash
 cd backend
 python -m venv venv
-venv\Scripts\activate
+source venv/bin/activate   # macOS/Linux
+venv\Scripts\activate      # Windows
 pip install -r requirements.txt
-copy .env.example .env
+cp .env.example .env
 uvicorn app.main:app --reload
 ```
 
@@ -206,21 +229,24 @@ This version remains functional and serves as a historical reference and portfol
 - ⬜ API integration
 - ⬜ Item listing UI
 
-### **Phase 3 — Docker Integration**
+### **Phase 3 — Mobile Apps (iOS + Android)**
 
-- ⬜ Full stack docker-compose
-- ⬜ Production Dockerfiles
-- ⬜ Nginx reverse proxy
+- ⬜ React Native scaffold
+- ⬜ Mobile auth
+- ⬜ Mobile item listing
+- ⬜ Push notifications
 
-### **Phase 4 — Deployment**
+### **Phase 4 — Desktop Apps (macOS + Windows)**
+
+- ⬜ Tauri/Electron scaffold
+- ⬜ Desktop UI
+- ⬜ Local caching
+
+### **Phase 5 — Deployment**
 
 - ⬜ Deploy backend to Ubuntu VM
 - ⬜ Deploy frontend
 - ⬜ CI/CD pipeline
-
-### **Phase 5 — Mobile App**
-
-- ⬜ React Native or Flutter client
 
 ---
 
