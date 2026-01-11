@@ -1,0 +1,37 @@
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: usellit-backend
+    restart: always
+    env_file:
+      - ./backend/.env
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    networks:
+      - usellit-network
+
+  db:
+    image: postgres:16
+    container_name: usellit-db
+    restart: always
+    environment:
+      POSTGRES_USER: usellit
+      POSTGRES_PASSWORD: usellit123
+      POSTGRES_DB: usellit
+    ports:
+     - "5432:5432"
+    volumes:
+     - "postgres_data:/var/lib/postgresql/data"
+    networks:
+      - usellit-network
+
+volumes:
+  postgres_data:
+
+networks:
+  usellit-network:
+    driver: bridge 
