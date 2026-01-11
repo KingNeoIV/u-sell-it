@@ -6,7 +6,7 @@ class Settings(BaseSettings):
     app_name: str = "u-sell-it API"
     environment: str = "dev"
 
-    database_url: str = Field(alias="DATABASE_URL")
+    DATABASE_URL: str = Field(alias="DATABASE_URL")
 
     jwt_secret_key: str = Field(alias="JWT_SECRET_KEY")
     jwt_algorithm: str = Field(default="HS256", alias="JWT_ALGORITHM")
@@ -18,7 +18,7 @@ class Settings(BaseSettings):
     )
 
     class Config:
-        env_file = ".env.example"  # Placeholder and will need to be updated
+        env_file = ".env"  # Placeholder and will need to be updated
         env_file_encoding = "utf-8"
         extra = "ignore"
 
