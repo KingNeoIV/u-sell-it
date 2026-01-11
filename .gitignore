@@ -1,18 +1,29 @@
-# Ignore virtual environments
-venv/
-
-# Ignore Python cache and compiled files
+# Python
 __pycache__/
 *.pyc
+*.pyo
+*.pyd
 
-# Ignore logs
+# Virtual environments
+venv/
+.env
+
+# Logs
 *.log
 
-# Ignore VS Code settings
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE settings
 .vscode/
+.idea/
 
-# Ignore watcher.py
+# Node / frontend (future)
+node_modules/
+dist/
+build/
+
+# Local dev files
 watcher.py
-
-# Ignore the db_config
 db_config.json
