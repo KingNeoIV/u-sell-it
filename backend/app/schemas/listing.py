@@ -7,11 +7,10 @@ class ListingBase(BaseModel):
     title: str
     description: str
     price: float
-    user_id: str
 
 
 class ListingCreate(ListingBase):
-    pass
+    user_id: str | None = None
 
 
 class ListingRead(ListingBase):
