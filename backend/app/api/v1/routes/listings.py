@@ -3,13 +3,19 @@ from sqlalchemy.orm import Session
 from app.db.session import get_db
 from app.schemas.listing import ListingCreate, ListingRead
 from app.services.listing_service import ListingService
+from app.services.auth_service import get_current_user
 
 router = APIRouter()
 
 
 @router.post("/", response_model=ListingRead)
-def create_listing(payload: ListingCreate, db: Session = Depends(get_db)):
+def create_listing(
+    payload: ListingCreate,
+    db: Session = Depends(get_db),
+    current_user=Depends(get_current_user),
+):
     service = ListingService(db)
+    payload.user_id = current_user.id
     return service.create_listing(payload)
 
 
