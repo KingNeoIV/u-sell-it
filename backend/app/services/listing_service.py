@@ -31,3 +31,24 @@ class ListingService:
 
     def get_listings_by_user(self, user_id: str):
         return self.db.query(Listing).filter(Listing.user_id == user_id).all()
+
+    def update_listing(self, listing_id: str, payload: dict):
+        listing = self.get_listing_by_id(listing_id)
+        if not listing:
+            return None
+
+        for key, value in payload.items():
+            setattr(listing, key, value)
+
+        self.db.commit()
+        self.db.refresh(listing)
+        return listing
+
+    def delete_listing(self, listing_id: str):
+        listing = self.get_listing_by_id(listing_id)
+        if not listing:
+            return None
+
+        self.db.delete(listing)
+        self.db.commit()
+        return True
