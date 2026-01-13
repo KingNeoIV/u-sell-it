@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.orm import Session
 from app.db.session import get_db
 from app.schemas.listing import ListingCreate, ListingRead
@@ -36,3 +36,46 @@ def get_listing(listing_id: str, db: Session = Depends(get_db)):
     if not listing:
         raise HTTPException(status_code=404, detail="Listing not found")
     return listing
+
+
+@router.put("/{listing_id}", response_model=ListingRead)
+def update_listing(
+    listing_id: str,
+    payload: ListingCreate,
+    db: Session = Depends(get_db),
+    current_user=Depends(get_current_user),
+):
+    service = ListingService(db)
+    listing = service.get_listing_by_id(listing_id)
+
+    if not listing:
+        raise HTTPException(status_code=404, detail="Listing not found")
+
+    if listing.user_id != current_user.id:
+        raise HTTPException(
+            status_code=403, detail="Not authorized to update this listing"
+        )
+
+    update = service.update_listing(listing_id, payload.dict(exclude_unset=True))
+    return update
+
+
+@router.delete("/{listing_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_listing(
+    listing_id: str,
+    db: Session = Depends(get_db),
+    current_user=Depends(get_current_user),
+):
+    service = ListingService(db)
+    listing = service.get_listing_by_id(listing_id)
+
+    if not listing:
+        raise HTTPException(status_code=404, detail="Listing not found")
+
+    if listing.user_id != current_user.id:
+        raise HTTPException(
+            status_code=403, detail="Not authorized to delete this listing"
+        )
+
+    service.delete_listing(listing_id)
+    return None
