@@ -1,4 +1,5 @@
 import uuid
+from sqlalchemy import Boolean
 from sqlalchemy import Column, String, DateTime
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.sql import func
@@ -18,6 +19,8 @@ class User(Base):
 
     # Securely hashed password (bcrypt via Passlib).
     hashed_password = Column(String, nullable=False)
+
+    is_active = Column(Boolean, default=True, nullable=False)
 
     # Timestamp automatically set when the user account is created.
     created_at = Column(DateTime(timezone=True), server_default=func.now())
