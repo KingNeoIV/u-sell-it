@@ -1,37 +1,41 @@
 services:
+  # FastAPI backend service
   backend:
     build:
-      context: ./backend
-      dockerfile: Dockerfile
+      context: ./backend                # Build from the backend directory
+      dockerfile: Dockerfile            # Use the backend Dockerfile
     container_name: usellit-backend
-    restart: always
+    restart: always                     # Automatically restart on failure
     env_file:
-      - ./backend/.env
+      - ./backend/.env                  # Environment variables for the backend
     ports:
-      - "8000:8000"
+      - "8000:8000"                     # Expose FastAPI on port 8000
     depends_on:
-      - db
+      - db                              # Ensure database starts before backend
     networks:
-      - usellit-network
+      - usellit-network                 # Shared network for backend and DB
 
+# PostgreSQL database serivce
   db:
-    image: postgres:16
+    image: postgres:16                 # Official Postgres 16 image
     container_name: usellit-db
     restart: always
     environment:
-      POSTGRES_USER: usellit
+      POSTGRES_USER: usellit          # Database username
       POSTGRES_PASSWORD: usellit123
-      POSTGRES_DB: usellit
+      POSTGRES_DB: usellit            # Default database name
     ports:
-     - "5432:5432"
+     - "5432:5432"                    # Expose Postgres for local access
     volumes:
-     - "postgres_data:/var/lib/postgresql/data"
+     - "postgres_data:/var/lib/postgresql/data"     # Persistent DB storage
     networks:
       - usellit-network
 
+# Persistent volume for PostgreSQL data
 volumes:
   postgres_data:
 
+# Shared Docker network for backend and database
 networks:
   usellit-network:
     driver: bridge 
