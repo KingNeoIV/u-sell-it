@@ -5,6 +5,9 @@ from app.schemas.listing import ListingCreate, ListingRead
 from app.services.listing_service import ListingService
 from app.services.auth_service import get_current_user
 
+# Router for listing-related operations.
+# All endpoints in this module manage creation, retrival, update,
+# and deletion of listings.
 router = APIRouter()
 
 
@@ -14,6 +17,12 @@ def create_listing(
     db: Session = Depends(get_db),
     current_user=Depends(get_current_user),
 ):
+    """
+    Create a new listing.
+
+    The authentication user becomes the owner of the listing.
+    Listing creation and persistence are handled in the service layer.
+    """
     service = ListingService(db)
     payload.user_id = current_user.id
     return service.create_listing(payload)
@@ -25,12 +34,23 @@ def get_listings(
     category_name: str | None = Query(None),
     db: Session = Depends(get_db),
 ):
+    """
+    Retieve all listings with optional catefory filtering.
+
+    Both category_id and category_name are optional filters.
+    Filtering and query logic are delegated to the service layer.
+    """
     service = ListingService(db)
     return service.get_all_listings(category_id, category_name)
 
 
 @router.get("/{listing_id}", response_model=ListingRead)
 def get_listing(listing_id: str, db: Session = Depends(get_db)):
+    """
+    Retrieve a single listing by its ID.
+
+    If the listing does not exist, return a 404 error.
+    """
     service = ListingService(db)
     listing = service.get_listing_by_id(listing_id)
     if not listing:
@@ -45,6 +65,13 @@ def update_listing(
     db: Session = Depends(get_db),
     current_user=Depends(get_current_user),
 ):
+    """
+    Update an existing listing.
+
+    The listing must exist and must belong to the authenticated user.
+    Unauthorized users receive a 403 error. Partial updates are supported
+    through exclude_unset to avoid overwriting unspecified fields.
+    """
     service = ListingService(db)
     listing = service.get_listing_by_id(listing_id)
 
@@ -66,6 +93,13 @@ def delete_listing(
     db: Session = Depends(get_db),
     current_user=Depends(get_current_user),
 ):
+    """
+    Delete an existing listing.
+
+    The listing must exist and must be owned by the authenticated user.
+    Unauthorized users receive a 403 error. A successful deletion returns
+    a 204 no Content response.
+    """
     service = ListingService(db)
     listing = service.get_listing_by_id(listing_id)
 
