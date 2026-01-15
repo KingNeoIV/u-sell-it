@@ -1,3 +1,4 @@
+from uuid import UUID
 from pydantic import BaseModel, EmailStr
 
 
@@ -17,7 +18,7 @@ class UserCreate(UserBase):
 # Includes identifiers and account status.
 class UserRead(UserBase):
     # Unique identifier for the user.
-    id: int
+    id: UUID
 
     # Indicates whether the user account is active.
     is_active: bool
