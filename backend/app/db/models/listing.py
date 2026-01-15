@@ -23,8 +23,11 @@ class Listing(Base):
     # Price stored as a fixed-precision numeric value.
     price = Column(Numeric(10, 2), nullable=False)
 
-    # Foreing key linking the listing to the user who created it.
+    # Foreign key linking the listing to the user who created it.
     user_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=False)
+
+    # Foreign key linking the listing to its category.
+    category_id = Column(UUID(as_uuid=True), ForeignKey("categories.id"), nullable=True)
 
     # Timestamp automatically set when the listing is created.
     created_at = Column(DateTime(timezone=True), server_default=func.now())
