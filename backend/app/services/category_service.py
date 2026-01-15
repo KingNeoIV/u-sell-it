@@ -32,7 +32,7 @@ class CategoryService:
             data: Validated CategoryCreate schema containing input fields.
 
         Returns:
-            the newly created Category object.
+            The newly created Category object.
 
         Raises:
             IntegrityError: If a category with the same name already exists.
