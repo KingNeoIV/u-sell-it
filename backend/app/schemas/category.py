@@ -3,7 +3,7 @@ Pydantic schemas for Category objects.
 
 These schemas define how Category data is validated and transferred
 between the API layer and the database layer. They ensure that incoming
-requests contain valid fields and that outgoing resposes follow a
+requests contain valid fields and that outgoing responses follow a
 consistent structure.
 """
 
@@ -18,7 +18,9 @@ class CategoryBase(BaseModel):
     This includes attributes that can be provided by the client.
     """
 
-    name: str = Field(..., description="Readable name of category must be unique.")
+    name: str = Field(
+        ..., description="Human readable name of the category. Must be unique."
+    )
     description: Optional[str] = Field(
         None,
         description="Optional text describing the purpose or context of the category.",
