@@ -27,3 +27,6 @@ build/
 # Local dev files
 watcher.py
 db_config.json
+
+# My Workflow reset
+DEV_RESET_WORKFLOW.md
