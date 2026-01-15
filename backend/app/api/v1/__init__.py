@@ -18,4 +18,4 @@ api_router.include_router(items.router)
 # These routers are defined locally withing the v1 package.
 api_router.include_router(listings_router, prefix="/listings", tags=["listings"])
 api_router.include_router(images_router, prefix="/images", tags=["images"])
-api_router.include_router(categories_router, prefix="/categories", tags=["categories"])
+api_router.include_router(categories_router)
