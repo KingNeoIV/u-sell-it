@@ -23,5 +23,4 @@ class ItemRead(ItemBase):
     # ID of the user who owns the item.
     owner_id: int
 
-    class Config:
-        from_attributes = True
+    model_config = {"from_attributes": True}
