@@ -58,5 +58,4 @@ class CategoryRead(CategoryBase):
 
     id: UUID = Field(..., description="Unique identifier for the category.")
 
-    class Config:
-        from_attributes = True
+    model_config = {"from_attributes": True}
