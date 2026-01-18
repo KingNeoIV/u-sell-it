@@ -11,9 +11,9 @@ class ListingService:
         self.db = db
 
     # Create and persist a new listing.
-    def create_listing(self, payload: ListingCreate):
+    def create_listing(self, payload: dict):
         # Construct the Listing ORM object from the payload.
-        listing = Listing(**payload.dict())
+        listing = Listing(**payload)
 
         # Persist the new listing in the database.
         self.db.add(listing)
