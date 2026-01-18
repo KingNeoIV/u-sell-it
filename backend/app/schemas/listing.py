@@ -12,11 +12,9 @@ class ListingBase(BaseModel):
 
 
 # Schema used when creating a new listing.
-# user_id is optional because it will be injected from the authenticated user.
 # category_id allows the listing to be assigned to a category, but is not required.
 class ListingCreate(ListingBase):
-    user_id: str | None = None
-    category_id: str | None = None
+    category_id: str
 
 
 # Schema returned when reading listing data from the database.
@@ -28,5 +26,4 @@ class ListingRead(ListingBase):
     # List of images associated with the listing.
     images: List[ImageRead] = []
 
-    class Config:
-        orm_mode = True
+    model_config = {"from_attributes": True}
