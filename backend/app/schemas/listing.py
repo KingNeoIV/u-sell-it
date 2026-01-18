@@ -1,6 +1,7 @@
 from pydantic import BaseModel
 from typing import Optional, List
 from app.schemas.image import ImageRead
+from uuid import UUID
 
 
 # Base schema shared by all listing-related models.
@@ -21,7 +22,7 @@ class ListingCreate(ListingBase):
 # Includes indentifiers and related images.
 class ListingRead(ListingBase):
     # Unique identifier for the listing.
-    id: str
+    id: UUID
 
     # List of images associated with the listing.
     images: List[ImageRead] = []
