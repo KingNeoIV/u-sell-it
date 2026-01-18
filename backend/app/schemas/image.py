@@ -22,5 +22,4 @@ class ImageRead(ImageBase):
     # ID of the listing this image belongs to.
     listing_id: str
 
-    class Config:
-        orm_mode = True
+    model_config = {"from_attributes": True}
