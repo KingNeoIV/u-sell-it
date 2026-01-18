@@ -20,12 +20,16 @@ def create_listing(
     """
     Create a new listing.
 
-    The authentication user becomes the owner of the listing.
+    The authenticated user becomes the owner of the listing.
     Listing creation and persistence are handled in the service layer.
     """
     service = ListingService(db)
-    payload.user_id = current_user.id
-    return service.create_listing(payload)
+
+    # Convert payload to a dict and inject the authenticated user's ID
+    data = payload.model_dump()
+    data["user_id"] = str(current_user.id)
+
+    return service.create_listing(data)
 
 
 @router.get("/", response_model=list[ListingRead])
