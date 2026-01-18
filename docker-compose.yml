@@ -14,6 +14,8 @@ services:
       - db                              # Ensure database starts before backend
     networks:
       - usellit-network                 # Shared network for backend and DB
+    volumes:
+      - ./backend:/app                  # Mount local backend code into the container so changes apply instantly without rebuilding
 
 # PostgreSQL database serivce
   db:
