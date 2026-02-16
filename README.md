@@ -17,7 +17,7 @@
 <img src="https://img.shields.io/badge/License-MIT-blue?style=flat-square" />
 <img src="https://img.shields.io/badge/Python-3.12-yellow?style=flat-square&logo=python" />
 <img src="https://img.shields.io/badge/FastAPI-Ready-009688?style=flat-square&logo=fastapi" />
-<img src="https://img.shields.io/badge/React-Incoming-61DAFB?style=flat-square&logo=react" />
+<img src="https://img.shields.io/badge/React-Active-61DAFB?style=flat-square&logo=react" />
 
 <br><br>
 
@@ -27,11 +27,9 @@
 
 <div align="center">
 
-### ⚡ A full‑stack rebuild of the original desktop prototype
-
-### ⚡ Designed for Windows, macOS, Linux, iPhone (iOS), and Android
-
-### ⚡ Built for scalability, performance, and modern development
+### ⚡ A full‑stack rebuild of the original desktop prototype  
+### ⚡ Designed for Windows, macOS, Linux, iPhone (iOS), and Android  
+### ⚡ Built for scalability, performance, and modern development  
 
 </div>
 
@@ -44,10 +42,10 @@
 | Platform         | Status      | Notes                           |
 | ---------------- | ----------- | ------------------------------- |
 | **Windows**      | ✔ Supported | Primary development environment |
-| **macOS**        | ✔ Planned | Backend + future desktop client |
+| **macOS**        | ✔ Planned   | Backend + future desktop client |
 | **iPhone (iOS)** | ✔ Planned   | React Native or SwiftUI client  |
 | **Android**      | ✔ Planned   | React Native or Flutter client  |
-| **Linux**        | ✔ Planned | Backend + server deployment     |
+| **Linux**        | ✔ Planned   | Backend + server deployment     |
 
 </div>
 
@@ -64,12 +62,12 @@ u‑sell‑it is being built as a **true cross‑platform ecosystem**, with:
 
 u‑sell‑it is transforming from a standalone PyQt6 desktop app into a **full‑stack, production‑ready marketplace platform** with:
 
-- 🔐 Secure authentication
-- 🛒 Item listings
-- 📦 Local buying/selling
-- 📱 Native mobile apps (iOS + Android)
-- 🖥️ Desktop apps (macOS + Windows)
-- 🧱 Clean, scalable architecture
+- 🔐 Secure authentication  
+- 🛒 Item listings  
+- 📦 Local buying/selling  
+- 📱 Native mobile apps (iOS + Android)  
+- 🖥️ Desktop apps (macOS + Windows)  
+- 🧱 Clean, scalable architecture  
 
 This repo contains **both** the legacy desktop version and the new modern stack.
 
@@ -104,7 +102,7 @@ u-sell-it/
 │   ├── Dockerfile
 │   └── README.md
 │
-├── frontend/                # React + TypeScript frontend (coming soon)
+├── frontend/                # React + TypeScript frontend (in progress)
 │   ├── src/
 │   ├── public/
 │   └── package.json
@@ -128,35 +126,40 @@ u-sell-it/
 # 🔐 **Backend Features (FastAPI)**
 
 ### **Authentication**
-
-- Email‑based registration
-- Login
-- JWT access token (24 hours)
-- JWT refresh token (90 days)
-- Password hashing (bcrypt)
+- Email‑based registration  
+- Login  
+- JWT access token (24 hours)  
+- JWT refresh token (90 days)  
+- Password hashing (bcrypt)  
 
 ### **User System**
-
-- Create user
-- Fetch user
-- Protected routes (coming soon)
+- Create user  
+- Fetch user  
+- Protected routes (JWT dependency implemented)  
 
 ### **Item System**
-
-- Create item
-- List items
-- Item ownership
+- Create item  
+- List items  
+- Item ownership  
 
 ### **Database**
-
-- PostgreSQL
-- SQLAlchemy 2.0
-- Alembic migrations
+- PostgreSQL  
+- SQLAlchemy 2.0  
+- Alembic migrations  
 
 ### **API Docs**
+- `/docs` → Swagger UI  
+- `/redoc` → ReDoc  
 
-- `/docs` → Swagger UI
-- `/redoc` → ReDoc
+---
+
+# 🔐 **Frontend Authentication (React + TypeScript)**
+
+- Login page with API integration  
+- JWT stored in `localStorage`  
+- ProtectedRoute component  
+- Automatic redirect to `/dashboard`  
+- CORS‑enabled backend communication  
 
 ---
 
@@ -185,9 +188,9 @@ docker-compose up --build
 
 This starts:
 
-- PostgreSQL
-- FastAPI backend
-- (Frontend coming soon)
+- PostgreSQL  
+- FastAPI backend  
+- (Frontend coming soon)  
 
 ---
 
@@ -201,10 +204,10 @@ desktop-legacy/
 
 Includes:
 
-- PyQt6 UI
-- C++ backend logic
-- PostgreSQL schema
-- Screenshots and design assets
+- PyQt6 UI  
+- C++ backend logic  
+- PostgreSQL schema  
+- Screenshots and design assets  
 
 This version remains functional and serves as a historical reference and portfolio piece.
 
@@ -212,41 +215,52 @@ This version remains functional and serves as a historical reference and portfol
 
 # 🗺️ **Development Roadmap**
 
-### **Phase 1 — Backend Foundation (In Progress)**
+## **Phase 1 — Backend Foundation (Completed)**
 
-- ✔ FastAPI project structure
-- ✔ JWT authentication
-- ✔ User model + service
-- ✔ Item model + service
-- ⬜ Protected routes
-- ⬜ Alembic migrations
+- ✔ FastAPI project structure  
+- ✔ JWT authentication  
+- ✔ User model + service  
+- ✔ Item model + service  
+- ✔ Protected routes (JWT dependency + working login flow)  
+- ✔ Alembic migrations (base migrations in place)  
 
-### **Phase 2 — Frontend (React + TypeScript)**
+---
 
-- ⬜ Project scaffold
-- ⬜ Login/Register pages
-- ⬜ Auth context
-- ⬜ API integration
-- ⬜ Item listing UI
+## **Phase 2 — Frontend (React + TypeScript) — In Progress**
 
-### **Phase 3 — Mobile Apps (iOS + Android)**
+- ✔ Project scaffold  
+- ✔ Login page  
+- ✔ Auth helper (token storage + retrieval)  
+- ✔ ProtectedRoute component  
+- ⬜ Register page  
+- ⬜ Auth context (global user state)  
+- ⬜ API integration for `/users/me`  
+- ⬜ Item listing UI  
 
-- ⬜ React Native scaffold
-- ⬜ Mobile auth
-- ⬜ Mobile item listing
-- ⬜ Push notifications
+---
 
-### **Phase 4 — Desktop Apps (macOS + Windows)**
+## **Phase 3 — Mobile Apps (iOS + Android)**
 
-- ⬜ Tauri/Electron scaffold
-- ⬜ Desktop UI
-- ⬜ Local caching
+- ⬜ React Native scaffold  
+- ⬜ Mobile authentication  
+- ⬜ Mobile item listing  
+- ⬜ Push notifications  
 
-### **Phase 5 — Deployment**
+---
 
-- ⬜ Deploy backend to Ubuntu VM
-- ⬜ Deploy frontend
-- ⬜ CI/CD pipeline
+## **Phase 4 — Desktop Apps (macOS + Windows)**
+
+- ⬜ Tauri/Electron scaffold  
+- ⬜ Desktop UI  
+- ⬜ Local caching  
+
+---
+
+## **Phase 5 — Deployment**
+
+- ⬜ Deploy backend to Ubuntu VM  
+- ⬜ Deploy frontend  
+- ⬜ CI/CD pipeline  
 
 ---
 
@@ -256,6 +270,6 @@ This version remains functional and serves as a historical reference and portfol
 
 **Michael Rios**  
 Junior Computer Science Major • Full‑Stack Developer • AI Engineer  
-Texas A&M University–Victoria
+Texas A&M University–Victoria  
 
 </div>
