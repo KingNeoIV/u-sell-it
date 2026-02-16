@@ -1,12 +1,25 @@
+import { loginUser } from "../api/auth";
 import { useState } from "react";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Login attempt:", { email, password });
+
+    try {
+      const result = await loginUser({ email, password });
+
+      // Save JWT
+      localStorage.setItem("token", result.access_token);
+
+      // Redirect to dashboard
+      window.location.href = "/dashboard";
+    } catch (err) {
+      console.error(err);
+      alert("Login failed. Check your credentials.");
+    }
   };
 
   return (
