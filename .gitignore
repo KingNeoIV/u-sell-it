@@ -30,3 +30,7 @@ db_config.json
 
 # My Workflow reset
 DEV_RESET_WORKFLOW.md
+
+# Database files
+backend/dev.db
+*.db
