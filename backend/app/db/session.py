@@ -12,7 +12,13 @@ class Base(DeclarativeBase):
 
 # Create the database engine using the configured DATABASE_URL.
 # pool_pre_ping ensures stale connections are detected and refreshed.
-engine = create_engine(settings.DATABASE_URL, pool_pre_ping=True)
+# SQLite requires a special argument; PostgreSQL does not.
+engine = create_engine(
+    settings.DATABASE_URL,
+    connect_args={"check_same_thread": False} if settings.DATABASE_URL.startswith("sqlite") else {},
+    pool_pre_ping=True,
+)
+# engine = create_engine(settings.DATABASE_URL, pool_pre_ping=True)
 
 # Session factory used to create database sessions.
 # autocommit and autoflush are disabled for explicit transaction control.
