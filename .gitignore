@@ -34,3 +34,6 @@ DEV_RESET_WORKFLOW.md
 # Database files
 backend/dev.db
 *.db
+
+# Uploaded Images
+backend/uploads/
