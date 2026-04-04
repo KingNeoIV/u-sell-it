@@ -15,7 +15,7 @@ from app.db.session import get_db
 from app.schemas.category import CategoryCreate, CategoryRead, CategoryUpdate
 from app.services.category_service import CategoryService
 
-router = APIRouter(prefix="/categories", tags=["Categories"])
+router = APIRouter()
 
 
 @router.post(
