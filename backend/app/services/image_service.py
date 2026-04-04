@@ -1,4 +1,5 @@
 import os
+import uuid
 from sqlalchemy.orm import Session
 from fastapi import UploadFile
 from app.db.models.image import Image
@@ -10,16 +11,27 @@ class ImageService:
     def __init__(self, db: Session):
         self.db = db
 
-    def add_image(self, listing_id: str, file: UploadFile):
+    async def add_image(self, listing_id: str, file: UploadFile):
         # Ensure upload directory exists
         os.makedirs(UPLOAD_DIR, exist_ok=True)
 
-        # Build a safe file path
-        save_path = os.path.join(UPLOAD_DIR, file.filename)
+        # Extract and validate extension
+        _, ext = os.path.splitext(file.filename)
+        ext = ext.lower()
+
+        allowed_exts = {".png", ".jpg", ".jpeg"}
+        if ext not in allowed_exts:
+            raise ValueError("Unsupported file type")
+
+        # Generate safe UUID filename
+        new_filename = f"{uuid.uuid4()}{ext}"
+
+        # Build final save path
+        save_path = os.path.join(UPLOAD_DIR, new_filename)
 
         # Save file to disk
         with open(save_path, "wb") as buffer:
-            buffer.write(file.file.read())
+            buffer.write(await file.read())
 
         # Create DB entry
         image = Image(
