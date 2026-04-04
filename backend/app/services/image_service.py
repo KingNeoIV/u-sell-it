@@ -1,21 +1,34 @@
+import os
 from sqlalchemy.orm import Session
+from fastapi import UploadFile
 from app.db.models.image import Image
-from app.schemas.image import ImageCreate
+
+UPLOAD_DIR = "uploads"
 
 
-# Service layer for handling image-related database operations
 class ImageService:
     def __init__(self, db: Session):
-        # Database session injected from FastAPI dependency.
         self.db = db
 
-    # Createe and persist a new image associated with the listing.
-    def add_image(self, listing_id: str, payload: ImageCreate):
-        # Construct the Image ORM object using the listing ID and payload data.
-        image = Image(listing_id=listing_id, **payload.dict())
+    def add_image(self, listing_id: str, file: UploadFile):
+        # Ensure upload directory exists
+        os.makedirs(UPLOAD_DIR, exist_ok=True)
 
-        # Persist the new image in the database.
+        # Build a safe file path
+        save_path = os.path.join(UPLOAD_DIR, file.filename)
+
+        # Save file to disk
+        with open(save_path, "wb") as buffer:
+            buffer.write(file.file.read())
+
+        # Create DB entry
+        image = Image(
+            listing_id=listing_id,
+            file_path=save_path
+        )
+
         self.db.add(image)
         self.db.commit()
         self.db.refresh(image)
+
         return image
