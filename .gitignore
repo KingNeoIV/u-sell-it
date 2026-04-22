@@ -37,3 +37,6 @@ backend/dev.db
 
 # Uploaded Images
 backend/uploads/
+
+# Ignore usellit_README file
+usellit_docker_README.txt
