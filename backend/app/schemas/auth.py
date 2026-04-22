@@ -1,24 +1,32 @@
 from pydantic import BaseModel, EmailStr
 
 
-# Schema for login requests.
-# Validates user credentials submitted during authentication.
-class LoginRequest(BaseModel):
-    # User email address, validated using Pydantic's EmailStr.
+# Public user representation returned to the client
+class UserPublic(BaseModel):
+    id: str
     email: EmailStr
 
-    # Plaintext password provided by the user.
+    class Config:
+        from_attributes = True
+
+
+# Schema for login requests
+class LoginRequest(BaseModel):
+    email: EmailStr
     password: str
 
 
-# Schema returned after successful authentication.
-# Contains both access and refresh tokens for the client.
+# Schema returned after successful authentication (tokens only)
+# This is still useful for refresh endpoints
 class Token(BaseModel):
-    # Short-lived JWT used for authenticated API requests.
     access_token: str
-
-    # Long-lived JWT used to obtain new access tokens.
     refresh_token: str
-
-    # Token type used in Authorization headers.
     token_type: str = "bearer"
+
+
+# Modern login response: tokens + user object
+class LoginResponse(BaseModel):
+    access_token: str
+    refresh_token: str
+    token_type: str = "bearer"
+    user: UserPublic
