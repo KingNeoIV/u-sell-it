@@ -37,3 +37,6 @@ class Listing(Base):
 
     # Relationship to associated Image records.
     images = relationship("Image", backref="listing")
+
+    # Relationship to the Category model
+    category = relationship("Category", back_populates="listings")
