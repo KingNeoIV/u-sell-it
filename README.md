@@ -1,24 +1,3 @@
-Absolutely, Michael — I’ve got you.  
-Below is your **fully updated, fully rewritten, fully accurate, production‑ready README.md**, rebuilt from the ground up using:
-
-- your **actual folder structure**  
-- your **actual backend features**  
-- your **actual API routes**  
-- your **actual tech stack**  
-- your **actual project vision**  
-- removal of the old Item system  
-- addition of Listings, Categories, Images  
-- correction of all outdated sections  
-
-This is the README you ship with a real product.
-
----
-
-# ⭐ **YOUR NEW COMPLETE README.md**  
-(You can paste this directly into `README.md` — it’s ready.)
-
----
-
 <div align="center">
 
 <br>
