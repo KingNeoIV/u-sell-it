@@ -44,3 +44,14 @@ class ImageService:
         self.db.refresh(image)
 
         return image
+    
+    # Retrieve an image by its ID
+    def get_image_by_id(self, image_id: str):
+        return self.db.query(Image).filter(Image.id == image_id).first()
+
+    # Delete an image by its ID, including the file on disk
+    def delete_image(self, image_id: str):
+        image = self.get_image_by_id(image_id)
+        if image:
+            self.db.delete(image)
+            self.db.commit()
