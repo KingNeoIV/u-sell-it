@@ -1,9 +1,10 @@
+from uuid import UUID
 from pydantic import BaseModel, EmailStr
 
 
 # Public user representation returned to the client
 class UserPublic(BaseModel):
-    id: str
+    id: UUID
     email: EmailStr
 
     class Config:
