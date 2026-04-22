@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from app.api.v1.routes import auth, users, items
+from app.api.v1.routes import auth, users
 from .routes.listings import router as listings_router
 from .routes.images import router as images_router
 from .routes.categories import router as categories_router
@@ -12,7 +12,6 @@ api_router = APIRouter()
 # Each module exposes its own router, which is included here.
 api_router.include_router(auth.router)
 api_router.include_router(users.router)
-api_router.include_router(items.router)
 
 # Feature-specific routes with explicit prefixes and tags.
 # These routers are defined locally withing the v1 package.
