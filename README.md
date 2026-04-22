@@ -1,3 +1,24 @@
+Absolutely, Michael — I’ve got you.  
+Below is your **fully updated, fully rewritten, fully accurate, production‑ready README.md**, rebuilt from the ground up using:
+
+- your **actual folder structure**  
+- your **actual backend features**  
+- your **actual API routes**  
+- your **actual tech stack**  
+- your **actual project vision**  
+- removal of the old Item system  
+- addition of Listings, Categories, Images  
+- correction of all outdated sections  
+
+This is the README you ship with a real product.
+
+---
+
+# ⭐ **YOUR NEW COMPLETE README.md**  
+(You can paste this directly into `README.md` — it’s ready.)
+
+---
+
 <div align="center">
 
 <br>
@@ -60,11 +81,12 @@ u‑sell‑it is being built as a **true cross‑platform ecosystem**, with:
 
 # 🎨 **Project Vision**
 
-u‑sell‑it is transforming from a standalone PyQt6 desktop app into a **full‑stack, production‑ready marketplace platform** with:
+u‑sell‑it is evolving from a standalone PyQt6 desktop app into a **full‑stack, production‑ready marketplace platform** with:
 
 - 🔐 Secure authentication  
-- 🛒 Item listings  
-- 📦 Local buying/selling  
+- 🛒 User‑owned listings  
+- 🏷️ Categories  
+- 🖼️ Image uploads  
 - 📱 Native mobile apps (iOS + Android)  
 - 🖥️ Desktop apps (macOS + Windows)  
 - 🧱 Clean, scalable architecture  
@@ -95,30 +117,94 @@ This repo contains **both** the legacy desktop version and the new modern stack.
 ```text
 u-sell-it/
 │
-├── backend/                 # FastAPI backend (new)
-│   ├── app/
-│   ├── alembic/
-│   ├── requirements.txt
-│   ├── Dockerfile
-│   └── README.md
+├── .gitignore
+├── CONTRIBUTING.md
+├── docker-compose.yml
+├── LICENSE
+├── README.md
 │
-├── frontend/                # React + TypeScript frontend (in progress)
+├── backend/                                # FastAPI backend
+│   ├── .env
+│   ├── .env.example
+│   ├── alembic.ini
+│   ├── dev.db
+│   ├── Dockerfile
+│   ├── README.md
+│   ├── requirements.txt
+│   │
+│   ├── alembic/                             # Database migrations
+│   │   ├── env.py
+│   │   ├── README
+│   │   ├── script.py.mako
+│   │   └── versions/
+│   │       └── 8afd455ebd04_initial_schema.py
+│   │
+│   ├── app/
+│   │   ├── main.py
+│   │   ├── __init__.py
+│   │   │
+│   │   ├── api/
+│   │   │   ├── __init__.py
+│   │   │   └── v1/
+│   │   │       ├── __init__.py
+│   │   │       └── routes/
+│   │   │           ├── auth.py
+│   │   │           ├── categories.py
+│   │   │           ├── images.py
+│   │   │           ├── listings.py
+│   │   │           └── users.py
+│   │   │
+│   │   ├── core/
+│   │   │   ├── config.py
+│   │   │   ├── security.py
+│   │   │   └── __intit__.py
+│   │   │
+│   │   ├── db/
+│   │   │   ├── base.py
+│   │   │   ├── session.py
+│   │   │   ├── __intit__.py
+│   │   │   └── models/
+│   │   │       ├── category.py
+│   │   │       ├── image.py
+│   │   │       ├── listing.py
+│   │   │       ├── transaction.py
+│   │   │       ├── user.py
+│   │   │       └── __init__.py
+│   │   │
+│   │   ├── schemas/
+│   │   │   ├── auth.py
+│   │   │   ├── category.py
+│   │   │   ├── image.py
+│   │   │   ├── listing.py
+│   │   │   ├── user.py
+│   │   │   └── __init__.py
+│   │   │
+│   │   ├── services/
+│   │   │   ├── auth_service.py
+│   │   │   ├── category_service.py
+│   │   │   ├── image_service.py
+│   │   │   ├── listing_service.py
+│   │   │   ├── user_service.py
+│   │   │   └── __init__.py
+│   │   │
+│   │   └── uploads/                         # Image storage
+│   │
+│   └── venv/
+│
+├── frontend/                                # React + TypeScript frontend
 │   ├── src/
 │   ├── public/
+│   ├── vite.config.ts
 │   └── package.json
 │
-├── desktop-legacy/          # Original PyQt6 + C++ prototype
-│   ├── main.py
-│   ├── assets/
-│   ├── schema/
-│   ├── DLL Files/
-│   ├── linuxDemo/
-│   ├── requirements.txt
-│   └── README.md
-│
-├── docker-compose.yml       # Runs backend + database (+ frontend later)
-├── .env                     # Environment variables (not committed)
-└── README.md                # You are here
+└── desktop-legacy/                          # Original PyQt6 + C++ prototype
+    ├── main.py
+    ├── assets/
+    ├── schema/
+    ├── DLL Files/
+    ├── linuxDemo/
+    ├── requirements.txt
+    └── README.md
 ```
 
 ---
@@ -128,19 +214,36 @@ u-sell-it/
 ### **Authentication**
 - Email‑based registration  
 - Login  
-- JWT access token (24 hours)  
-- JWT refresh token (90 days)  
+- JWT access token  
 - Password hashing (bcrypt)  
 
 ### **User System**
-- Create user  
-- Fetch user  
-- Protected routes (JWT dependency implemented)  
+- Fetch current user  
+- Fetch user‑owned listings  
+- Protected routes (JWT dependency)  
 
-### **Item System**
-- Create item  
-- List items  
-- Item ownership  
+### **Listings System**
+- Create listing  
+- Read listing  
+- Update listing  
+- Delete listing  
+- Ownership enforcement  
+- UUID‑based IDs  
+- Linked images  
+- Linked categories  
+
+### **Categories**
+- Create category  
+- List categories  
+- Update category  
+- Delete category  
+- UUID‑based IDs  
+
+### **Images**
+- Upload image to listing  
+- Delete image  
+- Stored in `/uploads`  
+- Linked to listing via foreign key  
 
 ### **Database**
 - PostgreSQL  
@@ -150,16 +253,6 @@ u-sell-it/
 ### **API Docs**
 - `/docs` → Swagger UI  
 - `/redoc` → ReDoc  
-
----
-
-# 🔐 **Frontend Authentication (React + TypeScript)**
-
-- Login page with API integration  
-- JWT stored in `localStorage`  
-- ProtectedRoute component  
-- Automatic redirect to `/dashboard`  
-- CORS‑enabled backend communication  
 
 ---
 
@@ -176,7 +269,7 @@ uvicorn app.main:app --reload
 ```
 
 Open API docs:  
-👉 http://127.0.0.1:8000/docs
+👉 [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
 
 ---
 
@@ -220,9 +313,10 @@ This version remains functional and serves as a historical reference and portfol
 - ✔ FastAPI project structure  
 - ✔ JWT authentication  
 - ✔ User model + service  
-- ✔ Item model + service  
-- ✔ Protected routes (JWT dependency + working login flow)  
-- ✔ Alembic migrations (base migrations in place)  
+- ✔ Listings system  
+- ✔ Categories system  
+- ✔ Image upload system  
+- ✔ Alembic migrations  
 
 ---
 
@@ -230,12 +324,12 @@ This version remains functional and serves as a historical reference and portfol
 
 - ✔ Project scaffold  
 - ✔ Login page  
-- ✔ Auth helper (token storage + retrieval)  
-- ✔ ProtectedRoute component  
+- ✔ Auth helper  
+- ✔ ProtectedRoute  
 - ⬜ Register page  
-- ⬜ Auth context (global user state)  
-- ⬜ API integration for `/users/me`  
-- ⬜ Item listing UI  
+- ⬜ User dashboard  
+- ⬜ Listing UI  
+- ⬜ Category UI  
 
 ---
 
@@ -243,7 +337,7 @@ This version remains functional and serves as a historical reference and portfol
 
 - ⬜ React Native scaffold  
 - ⬜ Mobile authentication  
-- ⬜ Mobile item listing  
+- ⬜ Mobile listing UI  
 - ⬜ Push notifications  
 
 ---
