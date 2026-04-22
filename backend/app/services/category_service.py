@@ -120,16 +120,24 @@ class CategoryService:
         """
         Delete a Category by its UUID.
 
-        Args:
-            db: Active SQLAlchemy session.
-            category_id: UUID of the category to delete.
-
-        Returns:
-            True if the category was deleted, False if it did not exist.
+        Prevents deletion if any listings are still associated with the category.
         """
         category = db.query(Category).filter(Category.id == category_id).first()
         if not category:
             return False
+
+        # Prevent deletion if listings reference this category
+        if category.listings and len(category.listings) > 0:
+            from fastapi import HTTPException
+            raise HTTPException(
+                status_code=400,
+                detail="Category cannot be deleted because it has associated listings"
+            )
+
+        db.delete(category)
+        db.commit()
+        return True
+
 
         db.delete(category)
         db.commit()
