@@ -1,6 +1,7 @@
 import uuid
 from sqlalchemy import Column, String, Text
 from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.orm import relationship
 from app.db.session import Base
 
 
@@ -17,3 +18,6 @@ class Category(Base):
 
     # Optional text description providing additional context.
     description = Column(Text, nullable=True)
+
+    # Relationship to listings (MUST exist for deletion checks)
+    listings = relationship("Listing", back_populates="category")
