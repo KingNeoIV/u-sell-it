@@ -35,3 +35,33 @@ async def add_image(
     image = await image_service.add_image(str(listing_id), file)
 
     return image
+
+@router.delete("/{image_id}", status_code=200)
+def delete_image(
+    image_id: UUID,
+    db: Session = Depends(get_db)
+):
+    """
+    Delete an image by its ID.
+
+    Removes both the database record and the physical file.
+    """
+
+    image_service = ImageService(db)
+    image = image_service.get_image_by_id(str(image_id))
+
+    if not image:
+        raise HTTPException(status_code=404, detail="Image not found")
+
+    # Delete file from disk if it exists
+    import os
+    if image.file_path and os.path.exists(image.file_path):
+        try:
+            os.remove(image.file_path)
+        except Exception:
+            pass  # Don't crash if file is missing
+
+    # Delete DB record
+    image_service.delete_image(str(image_id))
+
+    return {"detail": "Image deleted successfully"}
