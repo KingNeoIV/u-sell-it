@@ -1,9 +1,14 @@
-import { loginUser } from "../api/auth";
 import { useState } from "react";
+import { loginUser } from "../api/auth";
+import { useAuthContext } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const { login } = useAuthContext();
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -11,11 +16,11 @@ export default function Login() {
     try {
       const result = await loginUser({ email, password });
 
-      // Save JWT
-      localStorage.setItem("token", result.access_token);
+      // Use AuthContext login
+      login(result.access_token, result.refresh_token, result.user);
 
-      // Redirect to dashboard
-      window.location.href = "/dashboard";
+      // Redirect using React Router
+      navigate("/dashboard");
     } catch (err) {
       console.error(err);
       alert("Login failed. Check your credentials.");
