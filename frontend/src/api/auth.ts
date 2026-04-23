@@ -3,9 +3,16 @@ export interface LoginRequest {
   password: string;
 }
 
+export interface User {
+  id: string;
+  email: string;
+}
+
 export interface LoginResponse {
   access_token: string;
+  refresh_token: string;
   token_type: string;
+  user: User;
 }
 
 const API_URL = "http://localhost:8000";
