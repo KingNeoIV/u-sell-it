@@ -5,6 +5,8 @@ import Login from "../pages/Login";
 import Register from "../pages/Register";
 import Dashboard from "../pages/Dashboard";
 import Profile from "../pages/Profile";
+import MyListings from "../pages/MyListings";
+import CreateListing from "../pages/CreateListing";
 import Layout from "../components/Layout";
 
 export default function AppRouter() {
@@ -33,6 +35,28 @@ export default function AppRouter() {
             <ProtectedRoute>
               <Layout>
                 <Profile />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/listings"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <MyListings />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/listings/create"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <CreateListing />
               </Layout>
             </ProtectedRoute>
           }
