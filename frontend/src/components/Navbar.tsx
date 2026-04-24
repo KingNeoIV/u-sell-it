@@ -28,6 +28,9 @@ export default function Navbar() {
             Profile
           </Link>
 
+          <Link to="/listings" style={styles.link}>My Listings</Link>
+          <Link to="/listings/create" style={styles.link}>Create Listing</Link>
+
           <button style={styles.logout} onClick={logout}>
             Logout
           </button>
