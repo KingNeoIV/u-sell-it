@@ -10,10 +10,11 @@ from app.core.config import settings
 app = FastAPI(title=settings.app_name)
 
 # Ensure uploads directory exists
-os.makedirs("uploads", exist_ok=True)
+UPLOAD_DIR = "uploads"
+os.makedirs(UPLOAD_DIR, exist_ok=True)
 
-# Serve uploaded images
-app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
+# Serve uploaded images as static files
+app.mount("/uploads", StaticFiles(directory=UPLOAD_DIR), name="uploads")
 
 # Add CORS middleware
 app.add_middleware(
