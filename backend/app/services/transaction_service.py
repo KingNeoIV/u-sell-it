@@ -32,3 +32,16 @@ def get_transaction(db: Session, transaction_id):
 # List all transactions
 def list_transactions(db: Session):
     return db.query(Transaction).all()
+
+# List all purchases for a user
+def get_purchases_by_user(db: Session, user_id: str):
+    return db.query(Transaction).filter(Transaction.buyer_id == user_id).all()
+
+# List all sales for a user
+def get_sales_by_user(db: Session, user_id: str):
+    return (
+        db.query(Transaction)
+        .join(Listing, Transaction.listing_id == Listing.id)
+        .filter(Listing.user_id == user_id)
+        .all()
+    )
