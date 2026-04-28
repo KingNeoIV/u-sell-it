@@ -1,7 +1,6 @@
 from pydantic_settings import BaseSettings
 from pydantic import Field
 
-
 # Application configuration settings.
 # Values are loaded from environment variables defined in the .env file.
 # Pydantic handles validation, type conversion, and alias mapping.
@@ -10,8 +9,10 @@ class Settings(BaseSettings):
     app_name: str = "u-sell-it API"
     environment: str = "dev"
 
+    # Base URL for building public image URLs
+    backend_url: str = Field(default="http://localhost:8000", alias="BACKEND_URL")
+
     # Database connection string.
-    # Loaded from the DATABASE_URL environment variable.
     DATABASE_URL: str = Field(alias="DATABASE_URL")
 
     # JWT configuration for authentication.
