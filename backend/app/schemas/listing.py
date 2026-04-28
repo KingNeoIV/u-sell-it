@@ -10,6 +10,7 @@ class ListingBase(BaseModel):
     title: str
     description: str
     price: float
+    status: str = "active"
 
 
 # Schema used when creating a new listing.
