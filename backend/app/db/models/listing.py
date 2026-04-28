@@ -35,6 +35,9 @@ class Listing(Base):
     # Relationship to the User model (owner of the listing).
     user = relationship("User", backref="listings")
 
+    # Current status of the listing (active, sold).
+    status = Column(String, default="active")
+
     # Relationship to associated Image records.
     images = relationship("Image", backref="listing")
 
