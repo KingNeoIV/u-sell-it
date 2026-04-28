@@ -39,7 +39,15 @@ class Listing(Base):
     status = Column(String, default="active")
 
     # Relationship to associated Image records.
-    images = relationship("Image", backref="listing")
+    # - cascade deletes images when listing is deleted
+    # - delete-orphan removes images no longer linked
+    # - lazy="joined" ensures images load automatically with listings
+    images = relationship(
+        "Image",
+        backref="listing",
+        cascade="all, delete-orphan",
+        lazy="joined"
+    )
 
     # Relationship to the Category model
     category = relationship("Category", back_populates="listings")
