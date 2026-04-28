@@ -24,6 +24,8 @@ class ListingCreate(ListingBase):
 class ListingRead(ListingBase):
     # Unique identifier for the listing.
     id: UUID
+    user_id: UUID
+    category_id: Optional[UUID] = None
 
     # List of images associated with the listing.
     images: List[ImageRead] = []
