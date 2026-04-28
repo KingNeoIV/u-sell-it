@@ -5,9 +5,6 @@ from app.schemas.listing import ListingCreate, ListingRead
 from app.services.listing_service import ListingService
 from app.services.auth_service import get_current_user
 
-# Router for listing-related operations.
-# All endpoints in this module manage creation, retrival, update,
-# and deletion of listings.
 router = APIRouter()
 
 
@@ -25,7 +22,6 @@ def create_listing(
     """
     service = ListingService(db)
 
-    # Convert payload to a dict and inject the authenticated user's ID
     data = payload.model_dump()
     data["user_id"] = str(current_user.id)
 
@@ -39,7 +35,7 @@ def get_listings(
     db: Session = Depends(get_db),
 ):
     """
-    Retieve all listings with optional catefory filtering.
+    Retrieve all listings with optional category filtering.
 
     Both category_id and category_name are optional filters.
     Filtering and query logic are delegated to the service layer.
@@ -57,8 +53,10 @@ def get_listing(listing_id: str, db: Session = Depends(get_db)):
     """
     service = ListingService(db)
     listing = service.get_listing_by_id(listing_id)
+
     if not listing:
         raise HTTPException(status_code=404, detail="Listing not found")
+
     return listing
 
 
@@ -73,8 +71,7 @@ def update_listing(
     Update an existing listing.
 
     The listing must exist and must belong to the authenticated user.
-    Unauthorized users receive a 403 error. Partial updates are supported
-    through exclude_unset to avoid overwriting unspecified fields.
+    Unauthorized users receive a 403 error.
     """
     service = ListingService(db)
     listing = service.get_listing_by_id(listing_id)
@@ -101,8 +98,7 @@ def delete_listing(
     Delete an existing listing.
 
     The listing must exist and must be owned by the authenticated user.
-    Unauthorized users receive a 403 error. A successful deletion returns
-    a 204 no Content response.
+    A successful deletion returns a 204 No Content response.
     """
     service = ListingService(db)
     listing = service.get_listing_by_id(listing_id)
