@@ -34,6 +34,16 @@ class PaymentMethodService:
     def list_cards(self, user_id):
         return self.db.query(PaymentMethod).filter_by(user_id=user_id).all()
 
+    def get_payment_method(self, user_id, payment_method_id):
+        return (
+            self.db.query(PaymentMethod)
+            .filter(
+                PaymentMethod.id == payment_method_id,
+                PaymentMethod.user_id == user_id
+            )
+            .first()
+        )
+
     def delete_card(self, card_id, user_id):
         card = self.db.query(PaymentMethod).filter_by(id=card_id, user_id=user_id).first()
         if not card:
