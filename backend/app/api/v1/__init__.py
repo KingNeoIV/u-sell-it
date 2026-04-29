@@ -4,6 +4,7 @@ from .routes.listings import router as listings_router
 from .routes.images import router as images_router
 from .routes.categories import router as categories_router
 from .routes.transaction import router as transactions_router
+from .routes.payment_methods import router as payment_methods_router
 
 # Main API router for version v1
 api_router = APIRouter()
@@ -18,3 +19,4 @@ api_router.include_router(listings_router, prefix="/listings", tags=["listings"]
 api_router.include_router(images_router, prefix="/images", tags=["images"])
 api_router.include_router(categories_router, prefix="/categories", tags=["categories"])
 api_router.include_router(transactions_router, prefix="/transactions", tags=["transactions"])
+api_router.include_router(payment_methods_router, prefix="/payment-methods", tags=["payment-methods"])
