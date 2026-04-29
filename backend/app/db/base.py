@@ -7,3 +7,4 @@ from app.db.models.listing import Listing
 from app.db.models.image import Image
 from app.db.models.category import Category
 from app.db.models.transaction import Transaction
+from app.db.models.password_reset_token import PasswordResetToken
