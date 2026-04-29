@@ -1,18 +1,14 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import type { ReactNode } from "react";
-
-interface User {
-  id: string;
-  email: string;
-}
+import type { User } from "../api/auth"; // Import the User interface we made in auth.ts
 
 interface AuthContextType {
   user: User | null;
-  accessToken: string | null;
-  refreshToken: string | null;
+  access_token: string | null; // Changed to match API
+  refresh_token: string | null; // Changed to match API
   isAuthenticated: boolean;
   loading: boolean;
-  login: (accessToken: string, refreshToken: string, user: User) => void;
+  login: (access_token: string, refresh_token: string, user: User) => void;
   logout: () => void;
 }
 
@@ -24,7 +20,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [refreshToken, setRefreshToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
-  // Load from localStorage on startup
   useEffect(() => {
     const storedAccess = localStorage.getItem("access_token");
     const storedRefresh = localStorage.getItem("refresh_token");
@@ -37,22 +32,20 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setRefreshToken(storedRefresh);
         setUser(parsedUser);
       } catch {
-        localStorage.removeItem("access_token");
-        localStorage.removeItem("refresh_token");
-        localStorage.removeItem("user");
+        // If data is corrupt, wipe it
+        localStorage.clear();
       }
     }
-
     setLoading(false);
   }, []);
 
-  const login = (accessToken: string, refreshToken: string, userData: User) => {
-    setAccessToken(accessToken);
-    setRefreshToken(refreshToken);
+  const login = (access_token: string, refresh_token: string, userData: User) => {
+    setAccessToken(access_token);
+    setRefreshToken(refresh_token);
     setUser(userData);
 
-    localStorage.setItem("access_token", accessToken);
-    localStorage.setItem("refresh_token", refreshToken);
+    localStorage.setItem("access_token", access_token);
+    localStorage.setItem("refresh_token", refresh_token);
     localStorage.setItem("user", JSON.stringify(userData));
   };
 
@@ -60,18 +53,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setAccessToken(null);
     setRefreshToken(null);
     setUser(null);
-
-    localStorage.removeItem("access_token");
-    localStorage.removeItem("refresh_token");
-    localStorage.removeItem("user");
+    localStorage.clear();
   };
 
   return (
     <AuthContext.Provider
       value={{
         user,
-        accessToken,
-        refreshToken,
+        access_token: accessToken, // Map internal state to context name
+        refresh_token: refreshToken,
         isAuthenticated: !!accessToken,
         loading,
         login,
