@@ -3,6 +3,8 @@ import ProtectedRoute from "../components/ProtectedRoute";
 
 import Login from "../pages/Login";
 import Register from "../pages/Register";
+import ForgotPassword from "../pages/ForgotPassword"; // NEW
+import ResetPassword from "../pages/ResetPassword";   // NEW
 import Dashboard from "../pages/Dashboard";
 import Profile from "../pages/Profile";
 import MyListings from "../pages/MyListings";
@@ -16,6 +18,8 @@ export default function AppRouter() {
         {/* Public */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} /> {/* NEW */}
+        <Route path="/reset-password" element={<ResetPassword />} />   {/* NEW */}
 
         {/* Protected */}
         <Route
