@@ -2,6 +2,8 @@ import { useState } from "react";
 import { loginUser } from "../api/auth";
 import { useAuthContext } from "../context/AuthContext";
 import { useNavigate, Link } from "react-router-dom";
+// Importing your AI background
+import welcomeBg from "../../assets/WelcomeUI.jpg"; 
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -29,84 +31,105 @@ export default function Login() {
   };
 
   return (
-    <div style={styles.container}>
-      <h1 style={styles.title}>u-sell-it</h1>
-      <h2 style={styles.subtitle}>Login to your account</h2>
+    <div style={styles.pageWrapper}>
+      <div style={styles.container}>
+        <h1 style={styles.title}>u-sell-it</h1>
+        <h2 style={styles.subtitle}>Login to your account</h2>
 
-      {error && <div style={styles.errorBanner}>{error}</div>}
+        {error && <div style={styles.errorBanner}>{error}</div>}
 
-      <form onSubmit={handleSubmit} style={styles.form}>
-        <input
-          type="email"
-          placeholder="Email Address"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          style={styles.input}
-          required
-        />
-
-        <div style={styles.passwordWrapper}>
+        <form onSubmit={handleSubmit} style={styles.form}>
           <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            type="email"
+            placeholder="Email Address"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             style={styles.input}
             required
           />
-          {/* Forgot Password Link Added Here */}
-          <div style={styles.forgotPasswordLinkContainer}>
-            <Link to="/forgot-password" style={styles.forgotLink}>
-              Forgot password?
-            </Link>
+
+          <div style={styles.passwordWrapper}>
+            <input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              style={styles.input}
+              required
+            />
+            <div style={styles.forgotPasswordLinkContainer}>
+              <Link to="/forgot-password" style={styles.forgotLink}>
+                Forgot password?
+              </Link>
+            </div>
           </div>
+
+          <button 
+            type="submit" 
+            style={isLoading ? {...styles.button, opacity: 0.7} : styles.button}
+            disabled={isLoading}
+          >
+            {isLoading ? "Logging in..." : "Login"}
+          </button>
+        </form>
+
+        <div style={styles.footer}>
+          Don't have an account? <Link to="/register" style={styles.signUpLink}>Sign Up</Link>
         </div>
-
-        <button 
-          type="submit" 
-          style={isLoading ? {...styles.button, opacity: 0.7} : styles.button}
-          disabled={isLoading}
-        >
-          {isLoading ? "Logging in..." : "Login"}
-        </button>
-      </form>
-
-      <div style={styles.footer}>
-        Don't have an account? <Link to="/register" style={styles.signUpLink}>Sign Up</Link>
       </div>
     </div>
   );
 }
 
 const styles = {
+  pageWrapper: {
+    height: "100vh",
+    width: "100vw",
+    backgroundImage: `url(${welcomeBg})`,
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    margin: 0,
+    padding: 0,
+    overflow: "hidden",
+  } as const,
+
   container: {
-    maxWidth: "400px",
-    margin: "80px auto",
-    padding: "30px",
-    borderRadius: "12px",
-    background: "#ffffff",
-    boxShadow: "0 4px 20px rgba(0,0,0,0.08)",
-    fontFamily: "sans-serif",
+    maxWidth: "420px",
+    width: "90%",
+    padding: "45px",
+    borderRadius: "24px",
+    // STYLE SYNC: 15% opacity and high blur
+    background: "rgba(255, 255, 255, 0.15)", 
+    backdropFilter: "blur(20px)",
+    border: "1px solid rgba(255, 255, 255, 0.2)",
+    boxShadow: "0 15px 45px rgba(0,0,0,0.4)",
+    fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
   } as const,
 
   title: {
-    textAlign: "center",
+    textAlign: "center" as const,
     margin: "0",
-    color: "#007bff",
-    fontSize: "28px",
+    color: "#007bff", // STYLE SYNC: Link blue branding
+    fontSize: "42px",
+    fontWeight: "800",
+    letterSpacing: "-1px",
   } as const,
 
   subtitle: {
-    textAlign: "center",
-    marginBottom: "24px",
+    textAlign: "center" as const,
+    marginBottom: "30px",
     fontSize: "16px",
-    color: "#666",
+    color: "#000000", // STYLE SYNC: Solid black contrast
+    fontWeight: "600",
   } as const,
 
   form: {
     display: "flex",
     flexDirection: "column" as const,
-    gap: "15px",
+    gap: "18px",
   } as const,
 
   passwordWrapper: {
@@ -121,52 +144,60 @@ const styles = {
 
   forgotLink: {
     fontSize: "13px",
-    color: "#007bff",
-    textDecoration: "none",
+    color: "#001aff", // STYLE SYNC: Subtle black for auxiliary links
+    textDecoration: "underline",
+    fontWeight: "500",
   } as const,
 
   input: {
-    padding: "12px",
+    padding: "16px",
     fontSize: "16px",
-    borderRadius: "6px",
-    border: "1px solid #ddd",
+    borderRadius: "10px",
+    border: "none",
     width: "100%",
     boxSizing: "border-box" as const,
+    // STYLE SYNC: Clean off-white high-opacity fill
+    background: "rgba(240, 248, 255, 0.95)",
+    color: "#333",
+    outline: "none",
   } as const,
 
   button: {
-    padding: "12px",
+    padding: "16px",
     fontSize: "16px",
     fontWeight: "bold",
     background: "#007bff",
     color: "white",
     border: "none",
-    borderRadius: "6px",
+    borderRadius: "10px",
     cursor: "pointer",
     marginTop: "10px",
+    boxShadow: "0 8px 25px rgba(0, 123, 255, 0.4)",
   } as const,
 
   errorBanner: {
-    background: "#fee2e2",
+    background: "rgba(254, 226, 226, 0.9)",
     color: "#dc2626",
-    padding: "10px",
-    borderRadius: "6px",
+    padding: "12px",
+    borderRadius: "10px",
     marginBottom: "15px",
     fontSize: "14px",
-    textAlign: "center",
+    textAlign: "center" as const,
     border: "1px solid #fecaca",
+    fontWeight: "600",
   } as const,
 
   footer: {
-    marginTop: "20px",
-    textAlign: "center",
+    marginTop: "30px",
+    textAlign: "center" as const,
     fontSize: "14px",
-    color: "#666",
+    color: "#000000", // STYLE SYNC: Solid black
+    fontWeight: "500",
   } as const,
 
   signUpLink: {
     color: "#007bff",
     textDecoration: "none",
-    fontWeight: "bold",
+    fontWeight: "800",
   } as const,
 };
