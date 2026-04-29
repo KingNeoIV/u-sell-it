@@ -2,21 +2,32 @@ from pydantic import BaseModel
 from uuid import UUID
 from datetime import datetime
 
-# Shared fields for all transaction schemas
-class TransactionBase(BaseModel):
+# -----------------------------
+# TransactionCreate
+# -----------------------------
+# What the buyer sends when paying for a listing.
+class TransactionCreate(BaseModel):
+    payment_method_id: UUID
+
+
+# -----------------------------
+# Transaction (read model)
+# -----------------------------
+# What the API returns.
+class Transaction(BaseModel):
+    id: UUID
     buyer_id: UUID
     seller_id: UUID
     listing_id: UUID
-    status: str = "pending"
+    payment_method_id: UUID
 
-# Schema for creating a new transaction
-class TransactionCreate(TransactionBase):
-    pass
+    amount: float
+    fee_amount: float
+    seller_amount: float
 
-# Schema returned in API responses
-class Transaction(TransactionBase):
-    id: UUID
+    status: str
     created_at: datetime
 
-    class Config:
-        from_attributes = True
+    model_config = {
+        "from_attributes": True
+    }
