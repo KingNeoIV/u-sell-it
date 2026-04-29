@@ -21,9 +21,13 @@ export default function ForgotPassword() {
     try {
       const result = await forgotPassword({ email });
       
-      // result.token is the string from your backend (e.g., "kG&6dK")
-      const resetUrl = `${window.location.origin}/reset-password?token=${result.token}`;
+      // result.token might contain characters like #, &, or ^
+      // encodeURIComponent converts them to URL-safe codes (e.g., # becomes %23)
+      const safeToken = encodeURIComponent(result.token);
       
+      const resetUrl = `${window.location.origin}/reset-password?token=${safeToken}`;
+      
+      // We store the original token for logic, but the safe link for the UI
       setToken(result.token);
       setGeneratedLink(resetUrl);
       setMessage("Simulation: Password reset token generated successfully!");
