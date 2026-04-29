@@ -32,9 +32,21 @@ export interface ForgotPasswordRequest {
   email: string;
 }
 
+// UPDATE: Added this to match your FastAPI return dict
+export interface ForgotPasswordResponse {
+  message: string;
+  token: string;
+  expires_in_minutes: number;
+}
+
 export interface ResetPasswordRequest {
   token: string;
   new_password: string;
+}
+
+// UPDATE: Added this to match your FastAPI return {"message": "..."}
+export interface ResetPasswordResponse {
+  message: string;
 }
 
 // --- 2. Configuration ---
@@ -82,11 +94,12 @@ export async function loginUser(data: LoginRequest): Promise<LoginResponse> {
 /**
  * Request a password reset link via email.
  */
-export async function forgotPassword(data: ForgotPasswordRequest): Promise<string> {
+// FIX: Changed return type from Promise<string> to Promise<ForgotPasswordResponse>
+export async function forgotPassword(data: ForgotPasswordRequest): Promise<ForgotPasswordResponse> {
   const response = await fetch(`${API_URL}/auth/forgot-password`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data),
+  body: JSON.stringify(data),
   });
 
   if (!response.ok) {
@@ -100,7 +113,8 @@ export async function forgotPassword(data: ForgotPasswordRequest): Promise<strin
 /**
  * Reset password using a valid token.
  */
-export async function resetPassword(data: ResetPasswordRequest): Promise<string> {
+// FIX: Changed return type from Promise<string> to Promise<ResetPasswordResponse>
+export async function resetPassword(data: ResetPasswordRequest): Promise<ResetPasswordResponse> {
   const response = await fetch(`${API_URL}/auth/reset-password`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
