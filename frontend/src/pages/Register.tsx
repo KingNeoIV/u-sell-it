@@ -1,9 +1,23 @@
+/**
+ * @fileoverview User Registration View.
+ * Facilitates account creation by interfacing with the FastAPI auth/register endpoint.
+ * Includes a post-registration hydration step and auto-login logic.
+ */
+
 import { useState } from "react";
 import { useAuth } from "../hooks/useAuth";
 import { useNavigate, Link } from "react-router-dom";
-// Importing the Register wallpaper
 import registerBg from "../../assets/CustomerService.jpg";
 
+/**
+ * Register Component.
+ * * * Workflow:
+ * 1. Collects email/password credentials.
+ * 2. POSTs to the backend registration endpoint.
+ * 3. On Success: Displays a confirmation banner and initiates an artificial 2s delay.
+ * 4. Post-Delay: Calls `login()` to hydrate the global context and navigates to the Dashboard.
+ * * @returns {JSX.Element} The rendered Registration view.
+ */
 export default function Register() {
   const { login } = useAuth();
   const navigate = useNavigate();
@@ -13,6 +27,9 @@ export default function Register() {
   const [success, setSuccess] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  /**
+   * Handles form submission and registration lifecycle.
+   */
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
@@ -20,6 +37,9 @@ export default function Register() {
     setIsSubmitting(true);
 
     try {
+      /** * Note: In production, base URLs should be pulled from an environment 
+       * variable (e.g., process.env.REACT_APP_API_URL).
+       */
       const res = await fetch("http://localhost:8000/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -29,6 +49,7 @@ export default function Register() {
       const data = await res.json();
 
       if (!res.ok) {
+        // Industry standard: Use backend-provided detail or fallback
         setError(data.detail || "Registration failed. Please check your info.");
         setIsSubmitting(false);
         return;
@@ -36,29 +57,35 @@ export default function Register() {
 
       setSuccess("Success! Your account has been created.");
       
+      /** * UX Pattern: Brief pause to allow the user to read the success message
+       * before they are redirected to their new dashboard.
+       */
       setTimeout(() => {
         login(data.access_token, data.refresh_token || "", data.user);
         navigate("/dashboard");
       }, 2000);
 
     } catch (err) {
-      setError("Unable to connect to the server.");
+      // Handles network failures or CORS issues
+      setError("Unable to connect to the server. Please try again later.");
       setIsSubmitting(false);
     }
   };
 
   return (
-    <div style={styles.pageWrapper}>
+    <div style={styles.pageWrapper} role="main">
       <div style={styles.container}>
-        {/* Title updated to Link Blue, Subtitle to Solid Black */}
-        <h1 style={styles.title}>Create Account</h1>
-        <p style={styles.text}>Start showcasing your items to your local area.</p>
+        <header>
+          <h1 style={styles.title}>Create Account</h1>
+          <p style={styles.text}>Start showcasing your items to your local area.</p>
+        </header>
 
-        {success && <div style={styles.successBanner}>{success}</div>}
-        {error && <div style={styles.errorBanner}>{error}</div>}
+        {/* Feedback Banners with ARIA roles */}
+        {success && <div style={styles.successBanner} role="status">{success}</div>}
+        {error && <div style={styles.errorBanner} role="alert">{error}</div>}
 
         {!success ? (
-          <form onSubmit={handleSubmit} style={styles.form}>
+          <form onSubmit={handleSubmit} style={styles.form} aria-label="Registration Form">
             <input
               name="email"
               type="email"
@@ -67,6 +94,8 @@ export default function Register() {
               onChange={(e) => setForm({ ...form, email: e.target.value })}
               style={styles.input}
               required
+              aria-label="Email Address"
+              autoComplete="email"
             />
             <input
               name="password"
@@ -76,25 +105,30 @@ export default function Register() {
               onChange={(e) => setForm({ ...form, password: e.target.value })}
               style={styles.input}
               required
+              aria-label="Password"
+              autoComplete="new-password"
             />
             <button 
               type="submit" 
               disabled={isSubmitting} 
               style={isSubmitting ? styles.buttonDisabled : styles.button}
+              aria-busy={isSubmitting}
             >
               {isSubmitting ? "Generating Account..." : "Create Account"}
             </button>
           </form>
         ) : (
-          <div style={styles.simulationBox}>
+          <section style={styles.simulationBox} aria-live="polite">
             <p style={styles.label}>Redirecting to your dashboard...</p>
-            <div style={styles.loaderBar}></div>
-          </div>
+            <div style={styles.loaderBar} aria-hidden="true"></div>
+          </section>
         )}
 
-        <div style={styles.footer}>
-          <Link to="/login" style={styles.backLink}>Already have an account? Login</Link>
-        </div>
+        <footer style={styles.footer}>
+          <Link to="/login" style={styles.backLink}>
+            Already have an account? Login
+          </Link>
+        </footer>
       </div>
     </div>
   );
@@ -103,7 +137,7 @@ export default function Register() {
 const styles = {
   pageWrapper: {
     height: "100vh",
-    width: "100vw",
+    width: "100%",
     backgroundImage: `url(${registerBg})`,
     backgroundSize: "cover",
     backgroundPosition: "center",
@@ -114,6 +148,7 @@ const styles = {
     padding: 0,
     overflow: "hidden",
   } as const,
+
   container: { 
     maxWidth: "420px", 
     width: "90%",
@@ -126,22 +161,30 @@ const styles = {
     fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
     textAlign: "center" as const,
   } as const,
+
   title: { 
     textAlign: "center", 
-    color: "#007bff", // Colored like a link (Brand Blue)
+    color: "#007bff", 
     fontSize: "36px", 
     fontWeight: "800", 
     margin: "0 0 10px 0",
     letterSpacing: "-0.5px",
   } as const,
+
   text: { 
     textAlign: "center", 
     fontSize: "15px", 
-    color: "#000000", // Solid Black for contrast
+    color: "#000000", 
     marginBottom: "35px",
-    fontWeight: "500", // Slightly bolder to stand out on glass
+    fontWeight: "500",
   } as const,
-  form: { display: "flex", flexDirection: "column" as const, gap: "18px" } as const,
+
+  form: { 
+    display: "flex", 
+    flexDirection: "column" as const, 
+    gap: "18px" 
+  } as const,
+
   input: { 
     padding: "16px", 
     borderRadius: "10px", 
@@ -153,6 +196,7 @@ const styles = {
     color: "#333",
     outline: "none",
   } as const,
+
   button: { 
     padding: "16px", 
     background: "#007bff", 
@@ -164,7 +208,9 @@ const styles = {
     fontSize: "16px", 
     boxShadow: "0 8px 25px rgba(0, 123, 255, 0.4)",
     marginTop: "10px",
+    transition: "all 0.2s ease",
   } as const,
+
   buttonDisabled: { 
     padding: "16px", 
     background: "rgba(0, 123, 255, 0.5)", 
@@ -174,6 +220,7 @@ const styles = {
     cursor: "not-allowed",
     marginTop: "10px",
   } as const,
+
   successBanner: { 
     background: "rgba(220, 252, 231, 0.9)", 
     color: "#166534", 
@@ -183,7 +230,9 @@ const styles = {
     marginBottom: "15px", 
     fontSize: "14px",
     fontWeight: "bold",
+    border: "1px solid #bbf7d0",
   } as const,
+
   errorBanner: { 
     background: "rgba(254, 226, 226, 0.9)", 
     color: "#dc2626", 
@@ -193,13 +242,39 @@ const styles = {
     marginBottom: "15px", 
     fontSize: "14px",
     fontWeight: "bold",
+    border: "1px solid #fecaca",
   } as const,
-  simulationBox: { background: "rgba(255, 255, 255, 0.05)", padding: "20px", borderRadius: "12px", border: "1px dashed #000", marginTop: "10px", textAlign: "center" as const },
-  label: { fontSize: "13px", fontWeight: "bold", color: "#000", marginBottom: "12px" } as const,
-  loaderBar: { height: "4px", width: "100%", background: "#000", borderRadius: "2px" }, 
-  footer: { marginTop: "30px", textAlign: "center" } as const,
+
+  simulationBox: { 
+    background: "rgba(255, 255, 255, 0.05)", 
+    padding: "20px", 
+    borderRadius: "12px", 
+    border: "1px dashed #000", 
+    marginTop: "10px", 
+    textAlign: "center" as const 
+  },
+
+  label: { 
+    fontSize: "13px", 
+    fontWeight: "bold", 
+    color: "#000", 
+    marginBottom: "12px" 
+  } as const,
+
+  loaderBar: { 
+    height: "4px", 
+    width: "100%", 
+    background: "#000", 
+    borderRadius: "2px" 
+  },
+
+  footer: { 
+    marginTop: "30px", 
+    textAlign: "center" 
+  } as const,
+
   backLink: { 
-    color: "#0423c18c", // Set "Already have an account?" text to black for consistency
+    color: "#007bff", 
     textDecoration: "none", 
     fontSize: "14px", 
     fontWeight: "600" 
