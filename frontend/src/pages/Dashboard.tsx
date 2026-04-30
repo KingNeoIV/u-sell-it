@@ -1,78 +1,103 @@
+/**
+ * @fileoverview Main Marketplace Dashboard.
+ * Features a dual-pane layout with a sticky filtering sidebar and a scrollable 
+ * product discovery grid.
+ */
+
 import { useAuth } from "../hooks/useAuth";
 
+/**
+ * Dashboard Component.
+ * * * Layout Architecture:
+ * - Uses Flexbox for a sidebar-main relationship.
+ * - Employs 'hidden' overflow on the root to create an "App-like" feel where 
+ * individual columns scroll independently.
+ * - Integrated with `useAuth` to ensure session validity on mount.
+ */
 export default function Dashboard() {
-  // Hook to handle authentication status
+  /** * Validates authentication state.
+   * Note: If useAuth handles redirection internally, this ensures 
+   * the dashboard is protected.
+   */
   useAuth();
 
-  // Mock data to simulate items in your marketplace grid
+  /** Mock data for marketplace grid rendering */
   const items = Array(9).fill({
     name: "Product Item",
     price: "$129.00",
   });
 
   return (
-    /* pageWrapper: The outer container that holds the sidebar and main content side-by-side */
     <div style={styles.pageWrapper}>
       
-      {/* --- LEFT SIDEBAR: Browsing & Filtering Logic --- */}
-      <aside style={styles.sidebar}>
+      {/* --- SIDEBAR: Filtering Logic --- */}
+      <aside style={styles.sidebar} aria-label="Marketplace Filters">
         <div style={styles.filterContent}>
-          <p style={styles.sidebarHeader}>Marketplace Filters</p>
+          <header style={styles.sidebarHeader}>Marketplace Filters</header>
           
-          {/* Category Section: Uses checkboxes for multi-selection */}
-          <div style={styles.filterGroup}>
+          {/* Category Section */}
+          <section style={styles.filterGroup}>
             <p style={styles.filterLabel}>Category</p>
-            <div style={styles.checkList}>
-              <label style={styles.checkItem}><input type="checkbox" defaultChecked /> Electronics</label>
-              <label style={styles.checkItem}><input type="checkbox" /> Vehicles</label>
-              <label style={styles.checkItem}><input type="checkbox" /> Home Decor</label>
+            <div style={styles.checkList} role="group" aria-label="Categories">
+              <label style={styles.checkItem}>
+                <input type="checkbox" defaultChecked /> Electronics
+              </label>
+              <label style={styles.checkItem}>
+                <input type="checkbox" /> Vehicles
+              </label>
+              <label style={styles.checkItem}>
+                <input type="checkbox" /> Home Decor
+              </label>
             </div>
-          </div>
+          </section>
 
-          {/* Price Section: A range slider for quick budget filtering */}
-          <div style={styles.filterGroup}>
-            <p style={styles.filterLabel}>Price Range</p>
-            <input type="range" style={styles.slider} min="0" max="1000" />
-            <div style={styles.priceLabels}><span>$0</span><span>$1k+</span></div>
-          </div>
+          {/* Price Section */}
+          <section style={styles.filterGroup}>
+            <label htmlFor="price-range" style={styles.filterLabel}>Price Range</label>
+            <input 
+              id="price-range"
+              type="range" 
+              style={styles.slider} 
+              min="0" 
+              max="1000" 
+            />
+            <div style={styles.priceLabels}>
+              <span>$0</span>
+              <span>$1k+</span>
+            </div>
+          </section>
 
-          {/* Sort Section: Dropdown for organization */}
-          <div style={styles.filterGroup}>
-            <p style={styles.filterLabel}>Sort By</p>
-            <select style={styles.select}>
+          {/* Sort Section */}
+          <section style={styles.filterGroup}>
+            <label htmlFor="sort-by" style={styles.filterLabel}>Sort By</label>
+            <select id="sort-by" style={styles.select}>
               <option>Newest First</option>
               <option>Price: Low to High</option>
             </select>
-          </div>
+          </section>
         </div>
       </aside>
 
-      {/* --- MAIN CONTENT AREA: Displays the actual marketplace products --- */}
-      <main style={styles.mainArea}>
-        {/* Note: We don't put a Header here anymore because the Navbar.tsx 
-            is 'fixed' to the top of the entire browser window.
-        */}
-        
-        {/* contentScroll: Makes only the product grid scrollable, keeping sidebar/topbar pinned */}
+      {/* --- MAIN CONTENT AREA: Product Grid --- */}
+      <main style={styles.mainArea} aria-label="Marketplace Products">
         <div style={styles.contentScroll}>
-          <div style={styles.grid}>
-            {/* Loop through our mock items and render a 'Card' for each one */}
+          <div style={styles.grid} role="list">
             {items.map((item, index) => (
-              <div key={index} style={styles.card}>
-                {/* Visual placeholder for the product image */}
+              <article key={index} style={styles.card} role="listitem">
                 <div style={styles.cardImg}>
                    <span style={styles.imgText}>ITEM_PREVIEW</span>
                 </div>
                 
-                {/* Card footer containing details and price */}
                 <div style={styles.cardBody}>
                   <div>
                     <h4 style={styles.itemName}>{item.name}</h4>
                     <p style={styles.itemPrice}>{item.price}</p>
                   </div>
-                  <button style={styles.detailsBtn}>Details</button>
+                  <button style={styles.detailsBtn} aria-label={`View details for ${item.name}`}>
+                    Details
+                  </button>
                 </div>
-              </div>
+              </article>
             ))}
           </div>
         </div>
@@ -81,15 +106,19 @@ export default function Dashboard() {
   );
 }
 
+/**
+ * Component Styles
+ * Using 'as const' to ensure TypeScript treats these as specific CSS values.
+ */
 const styles = {
   pageWrapper: {
-    height: "100vh", // Lock height to viewport
-    width: "100vw",
-    display: "flex", // Puts Sidebar and Main Area next to each other
+    height: "100vh",
+    width: "100%", // Changed to 100% to avoid vw scrollbar issues
+    display: "flex",
     background: "#f8f9fa",
     fontFamily: "'Inter', sans-serif",
-    overflow: "hidden", // Prevents the whole page from scrolling (only the grid should scroll)
-    paddingTop: "30px", // CRITICAL: Makes room for the fixed top Navbar
+    overflow: "hidden", 
+    paddingTop: "70px", // Matched to Navbar height for consistency
   } as const,
 
   sidebar: {
@@ -103,7 +132,7 @@ const styles = {
   filterContent: { 
     padding: "25px", 
     flex: 1, 
-    overflowY: "auto" as const // Allows the filter list to scroll if it gets too long
+    overflowY: "auto" as const 
   },
 
   sidebarHeader: { 
@@ -119,6 +148,7 @@ const styles = {
   },
 
   filterLabel: { 
+    display: "block",
     fontSize: "14px", 
     fontWeight: "700", 
     marginBottom: "12px", 
@@ -136,7 +166,8 @@ const styles = {
     color: "#666", 
     cursor: "pointer", 
     display: "flex", 
-    gap: "8px" 
+    gap: "8px",
+    alignItems: "center"
   },
   
   slider: { 
@@ -160,20 +191,21 @@ const styles = {
   },
 
   mainArea: { 
-    flex: 1, // Tells this section to take up all remaining width
+    flex: 1, 
     display: "flex", 
     flexDirection: "column" as const 
   },
 
   contentScroll: { 
     flex: 1, 
-    overflowY: "auto" as const, // This makes the product grid scrollable
+    overflowY: "auto" as const, 
     padding: "30px" 
   },
 
   grid: { 
     display: "grid", 
-    gridTemplateColumns: "repeat(3, 1fr)", // Creates the 3-column marketplace look
+    // Responsive grid: will drop to 2 or 1 columns on smaller screens
+    gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))", 
     gap: "25px" 
   },
 
@@ -181,7 +213,8 @@ const styles = {
     background: "#fff", 
     borderRadius: "12px", 
     border: "1px solid #eee", 
-    overflow: "hidden" 
+    overflow: "hidden",
+    transition: "transform 0.2s ease-in-out",
   },
 
   cardImg: { 
