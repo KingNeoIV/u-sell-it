@@ -1,10 +1,24 @@
+/**
+ * @fileoverview User Authentication Login View.
+ * Handles credential submission, session initialization via AuthContext,
+ * and redirection to the protected dashboard.
+ */
+
 import { useState } from "react";
 import { loginUser } from "../api/auth";
 import { useAuthContext } from "../context/AuthContext";
 import { useNavigate, Link } from "react-router-dom";
-// Importing your AI background
 import welcomeBg from "../../assets/WelcomeUI.jpg"; 
 
+/**
+ * Login Component.
+ * * * Workflow:
+ * 1. Collects user credentials (email/password).
+ * 2. Authenticates via the loginUser API action.
+ * 3. On success: Hydrates global AuthContext and persists tokens.
+ * 4. On success: Redirects user to the application dashboard.
+ * 5. On failure: Displays a semantic error banner.
+ */
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -14,14 +28,26 @@ export default function Login() {
   const { login } = useAuthContext();
   const navigate = useNavigate();
 
+  /**
+   * Orchestrates the login submission process.
+   * Includes state guards to prevent concurrent requests.
+   */
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (isLoading) return; // Guard against duplicate submissions
+
     setError(null);
     setIsLoading(true);
 
     try {
       const result = await loginUser({ email, password });
+      
+      /** * Initialize global session. This handles localStorage 
+       * persistence internally within the context provider.
+       */
       login(result.access_token, result.refresh_token, result.user);
+      
+      // Redirect to the protected application area
       navigate("/dashboard");
     } catch (err: any) {
       setError(err.message || "Login failed. Please try again.");
@@ -31,14 +57,21 @@ export default function Login() {
   };
 
   return (
-    <div style={styles.pageWrapper}>
+    <div style={styles.pageWrapper} role="main">
       <div style={styles.container}>
-        <h1 style={styles.title}>u-sell-it</h1>
-        <h2 style={styles.subtitle}>Login to your account</h2>
+        <header>
+          <h1 style={styles.title}>u-sell-it</h1>
+          <h2 style={styles.subtitle}>Login to your account</h2>
+        </header>
 
-        {error && <div style={styles.errorBanner}>{error}</div>}
+        {/* Semantic Error Handling */}
+        {error && (
+          <div style={styles.errorBanner} role="alert" aria-live="assertive">
+            {error}
+          </div>
+        )}
 
-        <form onSubmit={handleSubmit} style={styles.form}>
+        <form onSubmit={handleSubmit} style={styles.form} aria-label="Login Form">
           <input
             type="email"
             placeholder="Email Address"
@@ -46,6 +79,8 @@ export default function Login() {
             onChange={(e) => setEmail(e.target.value)}
             style={styles.input}
             required
+            aria-label="Email Address"
+            autoComplete="email"
           />
 
           <div style={styles.passwordWrapper}>
@@ -56,6 +91,8 @@ export default function Login() {
               onChange={(e) => setPassword(e.target.value)}
               style={styles.input}
               required
+              aria-label="Password"
+              autoComplete="current-password"
             />
             <div style={styles.forgotPasswordLinkContainer}>
               <Link to="/forgot-password" style={styles.forgotLink}>
@@ -66,25 +103,33 @@ export default function Login() {
 
           <button 
             type="submit" 
-            style={isLoading ? {...styles.button, opacity: 0.7} : styles.button}
+            style={isLoading ? {...styles.button, opacity: 0.7, cursor: 'not-allowed'} : styles.button}
             disabled={isLoading}
+            aria-busy={isLoading}
           >
             {isLoading ? "Logging in..." : "Login"}
           </button>
         </form>
 
-        <div style={styles.footer}>
-          Don't have an account? <Link to="/register" style={styles.signUpLink}>Sign Up</Link>
-        </div>
+        <footer style={styles.footer}>
+          Don't have an account?{" "}
+          <Link to="/register" style={styles.signUpLink}>
+            Sign Up
+          </Link>
+        </footer>
       </div>
     </div>
   );
 }
 
+/**
+ * Component Styles.
+ * Uses Glassmorphism with 'as const' to satisfy TypeScript CSS property types.
+ */
 const styles = {
   pageWrapper: {
     height: "100vh",
-    width: "100vw",
+    width: "100%", // Using 100% to avoid vw-related scrollbar issues
     backgroundImage: `url(${welcomeBg})`,
     backgroundSize: "cover",
     backgroundPosition: "center",
@@ -101,7 +146,6 @@ const styles = {
     width: "90%",
     padding: "45px",
     borderRadius: "24px",
-    // STYLE SYNC: 15% opacity and high blur
     background: "rgba(255, 255, 255, 0.15)", 
     backdropFilter: "blur(20px)",
     border: "1px solid rgba(255, 255, 255, 0.2)",
@@ -112,7 +156,7 @@ const styles = {
   title: {
     textAlign: "center" as const,
     margin: "0",
-    color: "#007bff", // STYLE SYNC: Link blue branding
+    color: "#007bff",
     fontSize: "42px",
     fontWeight: "800",
     letterSpacing: "-1px",
@@ -122,7 +166,7 @@ const styles = {
     textAlign: "center" as const,
     marginBottom: "30px",
     fontSize: "16px",
-    color: "#000000", // STYLE SYNC: Solid black contrast
+    color: "#000000",
     fontWeight: "600",
   } as const,
 
@@ -144,7 +188,7 @@ const styles = {
 
   forgotLink: {
     fontSize: "13px",
-    color: "#001aff", // STYLE SYNC: Subtle black for auxiliary links
+    color: "#001aff",
     textDecoration: "underline",
     fontWeight: "500",
   } as const,
@@ -156,7 +200,6 @@ const styles = {
     border: "none",
     width: "100%",
     boxSizing: "border-box" as const,
-    // STYLE SYNC: Clean off-white high-opacity fill
     background: "rgba(240, 248, 255, 0.95)",
     color: "#333",
     outline: "none",
@@ -173,6 +216,7 @@ const styles = {
     cursor: "pointer",
     marginTop: "10px",
     boxShadow: "0 8px 25px rgba(0, 123, 255, 0.4)",
+    transition: "all 0.2s ease",
   } as const,
 
   errorBanner: {
@@ -191,7 +235,7 @@ const styles = {
     marginTop: "30px",
     textAlign: "center" as const,
     fontSize: "14px",
-    color: "#000000", // STYLE SYNC: Solid black
+    color: "#000000",
     fontWeight: "500",
   } as const,
 
