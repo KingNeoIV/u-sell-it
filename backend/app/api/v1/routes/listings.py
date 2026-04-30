@@ -43,6 +43,17 @@ def get_listings(
     service = ListingService(db)
     return service.get_all_listings(category_id, category_name)
 
+@router.get("/me", response_model=list[ListingRead])
+def get_my_listings(
+    db: Session = Depends(get_db),
+    current_user=Depends(get_current_user),
+):
+    """
+    Retrieve all listings owned by the currently authenticated user.
+    """
+    service = ListingService(db)
+    # Note: We pass current_user.id to filter the results
+    return service.get_listings_by_user(str(current_user.id))
 
 @router.get("/{listing_id}", response_model=ListingRead)
 def get_listing(listing_id: str, db: Session = Depends(get_db)):
