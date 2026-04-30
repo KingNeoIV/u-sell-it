@@ -118,11 +118,11 @@ const styles = {
     background: "#f8f9fa",
     fontFamily: "'Inter', sans-serif",
     overflow: "hidden", 
-    paddingTop: "70px", // Matched to Navbar height for consistency
+    paddingTop: "40px", // Matched to Navbar height for consistency
   } as const,
 
   sidebar: {
-    width: "260px",
+    width: "220px",
     background: "#fff",
     borderRight: "1px solid #eee",
     display: "flex",
