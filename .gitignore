@@ -32,6 +32,7 @@ db_config.json
 DEV_RESET_WORKFLOW.md
 
 # Database files
+initial_data.sql
 backend/dev.db
 *.db
 
