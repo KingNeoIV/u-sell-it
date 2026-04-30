@@ -111,7 +111,7 @@ const styles = {
     display: "flex",
     alignItems: "center",
     justifyContent: "space-between",
-    padding: "0 20px", // Increased padding slightly for better edge spacing
+    padding: "0 5px", // Increased padding slightly for better edge spacing
     position: "fixed" as const,
     top: 0,
     left: 0,
