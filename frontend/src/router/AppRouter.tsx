@@ -17,14 +17,13 @@ import Dashboard from "../pages/Dashboard";
 import Profile from "../pages/Profile";
 import MyListings from "../pages/MyListings";
 import CreateListing from "../pages/CreateListing";
+import EditListing from "../pages/EditListing"; // FIX: Added ../ to correctly exit router folder
 
 /**
  * AppRouter Component.
- * * Architecture:
  * 1. Public Routes: Accessible to everyone (Auth flow).
- * 2. Protected Wrapper: A nested route structure that enforces authentication 
- * and applies a consistent UI Layout to all internal pages.
- * 3. Catch-all: Redirects unknown paths to the login page.
+ * 2. Protected Wrapper: Nested route structure for Auth & Layout.
+ * 3. Catch-all: Redirects unknown paths to login.
  */
 export default function AppRouter() {
   return (
@@ -37,9 +36,6 @@ export default function AppRouter() {
         <Route path="/reset-password" element={<ResetPassword />} />
 
         {/* --- PROTECTED ROUTES (NESTED) --- */}
-        {/* Standard Pattern: Use a single Route to wrap all protected children.
-          This ensures you only define the logic for ProtectedRoute and Layout once.
-        */}
         <Route
           element={
             <ProtectedRoute>
@@ -53,10 +49,13 @@ export default function AppRouter() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/listings" element={<MyListings />} />
           <Route path="/listings/create" element={<CreateListing />} />
+          
+          {/* NEW: Edit Listing Route */}
+          {/* This matches the <Link to={`/listings/edit/${item.id}`}> in MyListings.tsx */}
+          <Route path="/listings/edit/:id" element={<EditListing />} />
         </Route>
 
         {/* --- FALLBACK --- */}
-        {/* Industry standard: Use Navigate for redirects rather than just rendering the component */}
         <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
     </BrowserRouter>
