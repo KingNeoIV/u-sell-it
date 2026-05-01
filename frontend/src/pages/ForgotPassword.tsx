@@ -114,11 +114,18 @@ export default function ForgotPassword() {
  */
 const styles = {
   pageWrapper: {
+    position: "fixed" as const,
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
     height: "100vh",
-    width: "100%",
+    width: "100vw", 
     backgroundImage: `url(${forgotBg})`,
     backgroundSize: "cover",
     backgroundPosition: "center",
+    backgroundRepeat: "no-repeat",
+    transition: "background 0.2s ease",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
