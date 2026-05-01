@@ -47,7 +47,7 @@ export interface ForgotPasswordRequest {
 export interface ForgotPasswordResponse {
   message: string;
   token: string;
-  expires_in_minutes: number;
+  expires_at: string;
 }
 
 /** Payload for setting a new password via recovery token. */
