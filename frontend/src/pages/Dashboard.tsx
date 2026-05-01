@@ -4,6 +4,7 @@
  * product discovery grid.
  */
 
+import { useState, useEffect } from "react";
 import { useAuth } from "../hooks/useAuth";
 
 /**
@@ -22,10 +23,24 @@ export default function Dashboard() {
   useAuth();
 
   /** Mock data for marketplace grid rendering */
-  const items = Array(9).fill({
-    name: "Product Item",
-    price: "$129.00",
-  });
+  const [items, setItems] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchListings = async () => {
+      try {
+        const response = await fetch("http://localhost:8000/listings/");
+        const data = await response.json();
+        setItems(data);
+      } catch (error) {
+        console.error("Failed to fetch:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchListings();
+  }, []);
 
   return (
     <div style={styles.pageWrapper}>
@@ -81,25 +96,50 @@ export default function Dashboard() {
       {/* --- MAIN CONTENT AREA: Product Grid --- */}
       <main style={styles.mainArea} aria-label="Marketplace Products">
         <div style={styles.contentScroll}>
-          <div style={styles.grid} role="list">
-            {items.map((item, index) => (
-              <article key={index} style={styles.card} role="listitem">
-                <div style={styles.cardImg}>
-                   <span style={styles.imgText}>ITEM_PREVIEW</span>
-                </div>
-                
-                <div style={styles.cardBody}>
-                  <div>
-                    <h4 style={styles.itemName}>{item.name}</h4>
-                    <p style={styles.itemPrice}>{item.price}</p>
+          
+          {/* --- CONDITIONAL LOGIC STARTS HERE --- */}
+          {loading ? (
+            <div style={{ textAlign: 'center', marginTop: '50px', color: '#666' }}>
+              <h3>Loading your marketplace...</h3>
+            </div>
+          ) : (
+            /* This only renders when loading is false */
+            <div style={styles.grid} role="list">
+              {items.map((item) => (
+                <article key={item.id} style={styles.card} role="listitem">
+                  <div style={styles.cardImg}>
+                    {item.images && item.images.length > 0 ? (
+                      <img 
+                        src={item.images[0].file_path} 
+                        alt={item.title} 
+                        style={{ 
+                          width: '100%', 
+                          height: '100%', 
+                          objectFit: 'contain' }} 
+                      />
+                    ) : (
+                      <span style={styles.imgText}>NO IMAGE</span>
+                    )}
                   </div>
-                  <button style={styles.detailsBtn} aria-label={`View details for ${item.name}`}>
-                    Details
-                  </button>
-                </div>
-              </article>
-            ))}
-          </div>
+                  
+                  <div style={styles.cardBody}>
+                    <div>
+                      <h4 style={styles.itemName}>{item.title}</h4>
+                      <p style={styles.itemPrice}>${item.price}</p>
+                    </div>
+                    <button 
+                      style={styles.detailsBtn} 
+                      aria-label={`View details for ${item.title}`}
+                    >
+                      Details
+                    </button>
+                  </div>
+                </article>
+              ))}
+            </div>
+          )}
+          {/* --- CONDITIONAL LOGIC ENDS HERE --- */}
+
         </div>
       </main>
     </div>
@@ -112,13 +152,15 @@ export default function Dashboard() {
  */
 const styles = {
   pageWrapper: {
+    position: "fixed" as const,
     height: "100vh",
-    width: "100%", // Changed to 100% to avoid vw scrollbar issues
+    width: "100vw", // Changed to 100% to avoid vw scrollbar issues
     display: "flex",
     background: "#f8f9fa",
     fontFamily: "'Inter', sans-serif",
     overflow: "hidden", 
     paddingTop: "40px", // Matched to Navbar height for consistency
+    boxSizing: "border-box",
   } as const,
 
   sidebar: {
@@ -127,6 +169,12 @@ const styles = {
     borderRight: "1px solid #eee",
     display: "flex",
     flexDirection: "column" as const,
+    height: "calc(100vh - 40px)",
+    position: "relative",
+    top: 0,
+    overflowY: "auto" as const,
+    overflowX: "hidden" as const,
+    zIndex: 100,
   } as const,
 
   filterContent: { 
@@ -193,13 +241,18 @@ const styles = {
   mainArea: { 
     flex: 1, 
     display: "flex", 
-    flexDirection: "column" as const 
+    flexDirection: "column" as const,
+    height: "100%",
+    overflow: "hidden", 
   },
 
   contentScroll: { 
     flex: 1, 
     overflowY: "auto" as const, 
-    padding: "30px" 
+    padding: "30px",
+    height: "100%", 
+    paddingBottom: "50px",
+    WebkitOverflowScrolling: "touch" as const,
   },
 
   grid: { 
@@ -218,11 +271,12 @@ const styles = {
   },
 
   cardImg: { 
-    height: "160px", 
+    height: "200px", 
     background: "#f8f9fa", 
     display: "flex", 
     alignItems: "center", 
-    justifyContent: "center" 
+    justifyContent: "center",
+    padding: "10px", 
   },
 
   imgText: { 
