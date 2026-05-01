@@ -128,11 +128,18 @@ export default function Login() {
  */
 const styles = {
   pageWrapper: {
+    position: "fixed" as const,
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
     height: "100vh",
-    width: "100%", // Using 100% to avoid vw-related scrollbar issues
+    width: "100wh", // Using 100% to avoid vw-related scrollbar issues
     backgroundImage: `url(${welcomeBg})`,
     backgroundSize: "cover",
     backgroundPosition: "center",
+    backgroundRepeat: "no-repeat",
+    transition: "background 0.2s ease",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
