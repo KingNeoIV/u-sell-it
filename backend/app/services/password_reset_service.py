@@ -1,4 +1,5 @@
 import uuid
+from fastapi import HTTPException, status
 from datetime import datetime, timedelta
 from sqlalchemy.orm import Session
 from app.db.models.user import User
@@ -13,7 +14,10 @@ class PasswordResetService:
     def create_reset_token(self, email: str):
         user = self.db.query(User).filter(User.email == email).first()
         if not user:
-            return None 
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="No account found with this email address"
+            ) 
 
         token = generate_reset_token()
 
@@ -28,7 +32,7 @@ class PasswordResetService:
         self.db.add(reset_entry)
         self.db.commit()
         self.db.refresh(reset_entry)
-        return token
+        return reset_entry
 
     def reset_password(self, token: str, new_password: str):
         entry = (
